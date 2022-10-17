@@ -1,7 +1,6 @@
 package me.washcar.wcnc.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import me.washcar.wcnc.dto.PingPongDto;
 import me.washcar.wcnc.dto.StatusDto;
 import me.washcar.wcnc.service.ServerInfoService;

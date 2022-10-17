@@ -4,25 +4,25 @@ import lombok.Getter;
 
 import java.util.List;
 
-public class StoreInfoDto {
+public class StoreInfo {
     //TODO 세차장리스트조회-Dto
     @Getter
-    public static class searchStoreByLocation {
+    public static class searchStoreByLocationDto {
         private List<String> store;
     }
     //TODO 세차장정보-Dto
     @Getter
-    public static class storeInfo {
+    public static class storeInfoDto {
         private String store;
     }
     //TODO 세차장메뉴-Dto
     @Getter
-    public static class storeMenu {
+    public static class storeMenuDto {
         private String store;
     }
     //TODO 세차장세부정보-Dto
     @Getter
-    public static class storeDetail {
+    public static class storeDetailDto {
         private String detail;
     }
 }
