@@ -3,10 +3,10 @@ package me.washcar.wcnc.dto;
 import lombok.Getter;
 
 @Getter
-public class StatusDto {
+public class _StatusDto {
     private Long id;
 
-    public StatusDto(Long id) {
+    public _StatusDto(Long id) {
         this.id = id;
     }
 }
