@@ -11,23 +11,23 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    @RequestMapping(value = "/search/{slug}/menu/{menuNumber}", method = RequestMethod.GET)
+    @RequestMapping(value = "/store/{slug}/menu/{menuNumber}", method = RequestMethod.GET)
     public Reservation.menuInfoDto menuInfo(@PathVariable String slug, @PathVariable String menuNumber){
         return reservationService.menuInfo(slug, menuNumber);
     }
 
-    @GetMapping("/search/{slug}/menu/{menuNumber}/available")
+    @GetMapping("/store/{slug}/menu/{menuNumber}/available")
     public Reservation.menuAvailableDateDto menuAvailable(@PathVariable String slug, @PathVariable String menuNumber){
         return reservationService.menuAvailableDate(slug, menuNumber);
     }
 
-    @GetMapping("/search/{slug}/menu/{menuNumber}/available/{date}")
+    @GetMapping("/store/{slug}/menu/{menuNumber}/available/{date}")
     public Reservation.menuAvailableTimeDto menuAvailableTime(@PathVariable String slug, @PathVariable String menuNumber, @PathVariable String date){
         return reservationService.menuAvailableTime(slug, menuNumber, date);
     }
 
-    @RequestMapping(value = "/search/{slug}/menu/{menuNumber}", method = RequestMethod.POST)
-    public Reservation.reservationDto reservation(@PathVariable String slug, @PathVariable String menuNumber){
-        return reservationService.reservation(slug, menuNumber);
+    @RequestMapping(value = "/store/{slug}/menu/{menuNumber}", method = RequestMethod.POST)
+    public Reservation.reservationDto reservation(@PathVariable String slug, @PathVariable String menuNumber, @RequestBody String body){
+        return reservationService.reservation(slug, menuNumber, body);
     }
 }

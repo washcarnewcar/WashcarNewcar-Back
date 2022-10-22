@@ -20,7 +20,8 @@ public class ReservationService {
         return new Reservation.menuAvailableTimeDto();
     }
     //TODO 세차예약요청-서비스
-    public Reservation.reservationDto reservation(String slug, String menuNumber) {
+    public Reservation.reservationDto reservation(String slug, String menuNumber, String body) {
+        //TODO body-mapping
         return new Reservation.reservationDto();
     }
 }
