@@ -14,7 +14,7 @@ public class Brand {
 
     @Id
     @GeneratedValue
-    private long brandNumber;
+    private Long brandId;
 
     @Column(length = 127)
     private String brand;

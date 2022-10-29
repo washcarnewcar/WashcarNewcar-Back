@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 public class StoreImage {
     @Id
     @GeneratedValue
-    private long storeImageNumber;
+    private Long storeImageId;
 
     private String photoUrl;
 

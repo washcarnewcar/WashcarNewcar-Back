@@ -12,7 +12,7 @@ import java.util.List;
 public class SlotOption {
     @Id
     @GeneratedValue
-    private long slotOptionNumber;
+    private Long slotOptionId;
 
     private Period TimeInterval;
 

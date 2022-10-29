@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 public class User_Store {
     @Id
     @GeneratedValue
-    private long user_storeNumber;
+    private Long user_storeId;
 
     @ManyToOne
     private Store store;

@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
 public class StoreLocation {
     @Id
     @GeneratedValue
-    private long storeLocationNumber;
+    private Long storeLocationId;
 
     private String address;
 

@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class Model {
     @Id
     @GeneratedValue
-    private long modelNumber;
+    private Long modelId;
 
     @Column(length = 127)
     private String model;

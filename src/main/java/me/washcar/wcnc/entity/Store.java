@@ -11,7 +11,7 @@ import java.util.List;
 public class Store {
     @Id
     @GeneratedValue
-    private long storeNumber;
+    private Long storeId;
 
     private String name;
 

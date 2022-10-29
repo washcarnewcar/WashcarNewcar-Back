@@ -12,7 +12,7 @@ import java.util.List;
 public class Slot {
     @Id
     @GeneratedValue
-    private long slotNumber;
+    private Long slotId;
 
     private LocalTime sunOpen;
     private LocalTime sunClose;

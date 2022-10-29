@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 public class ReservationException {
     @Id
     @GeneratedValue
-    private long reservationExceptionNumber;
+    private Long reservationExceptionId;
 
     private ZonedDateTime exceptionStartDateTime;
 
