@@ -38,30 +38,38 @@ class RoleToUserForm {
     private String roleName;
 }
 
+@Data
+class signUpForm {
+    private String id;
+    private String password;
+    private String mobile_carrier;
+    private String phone;
+}
+
 @RestController
 @RequiredArgsConstructor
 public class AuthorizationController {
     private final AuthorizationService authorizationService;
     private final _UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping("/super/users")
     public ResponseEntity<List<User>>getUsers(){
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
-    @PostMapping("/user/save")
+    @PostMapping("/super/user/save")
     public ResponseEntity<User>saveUser(@RequestBody User user){
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/save").toUriString());
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 
-    @PostMapping("/role/save")
+    @PostMapping("/super/role/save")
     public ResponseEntity<Role>saveRole(@RequestBody Role role){
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/role/save").toUriString());
         return ResponseEntity.created(uri).body(userService.saveRole(role));
     }
 
-    @PostMapping("/role/addtouser")
+    @PostMapping("/super/role/addtouser")
     public ResponseEntity<Role>addRoleToUser(@RequestBody RoleToUserForm form){
         userService.addRoleToUser(form.getUserId(), form.getRoleName());
         return ResponseEntity.ok().build();
@@ -110,8 +118,8 @@ public class AuthorizationController {
     }
 
     @PostMapping("/signup")
-    public Authorization.signupDto signup(){
-        return authorizationService.signup();
+    public Authorization.signupDto signup(@RequestBody signUpForm form){
+        return authorizationService.signup(form.getId(), form.getPassword(), form.getMobile_carrier(), form.getPhone());
     }
 
 }

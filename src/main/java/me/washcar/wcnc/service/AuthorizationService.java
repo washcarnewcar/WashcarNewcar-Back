@@ -16,7 +16,7 @@ public class AuthorizationService {
         return new Authorization.signupIdCheckDto();
     }
     //TODO 회원가입-서비스
-    public Authorization.signupDto signup() {
+    public Authorization.signupDto signup(String id, String password, String mobileCarrier, String phone) {
         return new Authorization.signupDto();
     }
 }
