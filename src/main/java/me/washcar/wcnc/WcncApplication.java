@@ -20,21 +20,26 @@ public class WcncApplication {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
-    CommandLineRunner run(_UserService userService){
+    CommandLineRunner run(_UserService userService) {
         return args -> {
             userService.saveRole(new Role(null, "ROLE_USER"));
             userService.saveRole(new Role(null, "ROLE_MANAGER"));
             userService.saveRole(new Role(null, "ROLE_ADMIN"));
             userService.saveRole(new Role(null, "ROLE_SUPER_ADMIN"));
 
-            userService.saveUser(new User(null, "TestIdThis", "test@gmail.com", "password", "nicktest", new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
-            userService.saveUser(new User(null, "hong", "hong@gmail.com", "hongPass", "gilt", new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
-            userService.saveUser(new User(null, "memememe", "me@gmail.com", "meme", "meisme", new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
-            userService.saveUser(new User(null, "wcncadmin", "admin@naver.com", "adminpassword", "ADMIN", new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+            userService.saveUser(new User(null, "TestIdThis", "test@gmail.com", "password", "nicktest",
+                    new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+            userService.saveUser(new User(null, "hong", "hong@gmail.com", "hongPass", "gilt", new ArrayList<>(),
+                    new ArrayList<>(), new ArrayList<>()));
+            userService.saveUser(new User(null, "memememe", "me@gmail.com", "meme", "meisme", new ArrayList<>(),
+                    new ArrayList<>(), new ArrayList<>()));
+            userService.saveUser(new User(null, "wcncadmin", "admin@naver.com", "adminpassword", "ADMIN",
+                    new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
 
             userService.addRoleToUser("TestIdThis", "ROLE_USER");
             userService.addRoleToUser("hong", "ROLE_MANAGER");
