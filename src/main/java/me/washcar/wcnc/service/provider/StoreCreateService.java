@@ -38,6 +38,7 @@ public class StoreCreateService {
                     .wayTo(form.getWayto())
                     .description(form.getDescription())
                     .previewImage(form.getPreview_image())
+                    .isChecked(false)
                     .isApproved(false)
                     .build();
 
@@ -63,12 +64,20 @@ public class StoreCreateService {
     }
 
     //TODO slug중복확인-서비스
-    public StoreCreate.slugCheckDto slugCheck(String slug) {
-        return new StoreCreate.slugCheckDto();
+    public StatusCodeDto slugCheck(String slug) {
+        if (storeRepo.findBySlug(slug) != null) {
+            return new StatusCodeDto(1401, "중복된 slug");
+        } else {
+            return new StatusCodeDto(1400, "사용 가능한 slug");
+        }
     }
 
     //TODO 세차장승인상태확인-서비스
     public StoreCreate.isApprovedDto isApproved(String slug) {
-        return new StoreCreate.isApprovedDto();
+        Store store = storeRepo.findBySlug(slug);
+        if(store == null) return new StoreCreate.isApprovedDto(-1, "error", "세차장이 존재하지 않음");
+        if(!store.getIsChecked()) return new StoreCreate.isApprovedDto(1501, "세차장 승인 대기중", "");
+        if(store.getIsApproved()) return new StoreCreate.isApprovedDto(1500, "세차장이 승인되었으며, 페이지가 운영중", "");
+        return new StoreCreate.isApprovedDto(1502, "세차장 승인 거부", "");
     }
 }

@@ -19,7 +19,7 @@ public class StoreCreateController {
     }
 
     @GetMapping("/provider/check-slug/{slug}")
-    public StoreCreate.slugCheckDto slugCheck(@PathVariable String slug) {
+    public StatusCodeDto slugCheck(@PathVariable String slug) {
         return storeCreateService.slugCheck(slug);
     }
 

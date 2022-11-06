@@ -15,7 +15,7 @@ import java.util.List;
 public class Store {
 
     @Builder
-    public Store(String name, String tel, String slug, String wayTo, String description, String previewImage, Boolean isApproved, StoreLocation storeLocation) {
+    public Store(String name, String tel, String slug, String wayTo, String description, String previewImage, Boolean isApproved, Boolean isChecked) {
         this.name = name;
         this.tel = tel;
         this.slug = slug;
@@ -23,6 +23,7 @@ public class Store {
         this.description = description;
         this.previewImage = previewImage;
         this.isApproved = isApproved;
+        this.isChecked = isChecked;
     }
 
     @Id
@@ -44,6 +45,9 @@ public class Store {
 
     @Column(nullable = false)
     private Boolean isApproved;
+
+    @Column(nullable = false)
+    private Boolean isChecked;
 
     @OneToOne(mappedBy = "store")
     private StoreLocation storeLocation;
