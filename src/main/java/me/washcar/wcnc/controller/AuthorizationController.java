@@ -10,13 +10,11 @@ import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.dto.Authorization;
 import me.washcar.wcnc.entity.Role;
 import me.washcar.wcnc.entity.User;
+import me.washcar.wcnc.form.RoleToUserForm;
+import me.washcar.wcnc.form.SignUpForm;
 import me.washcar.wcnc.service.AuthorizationService;
 import me.washcar.wcnc.service._UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -27,24 +25,9 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
-@Data
-class RoleToUserForm {
-    private String userId;
-    private String roleName;
-}
-
-@Data
-class signUpForm {
-    private String id;
-    private String password;
-    private String mobile_carrier;
-    private String phone;
-}
 
 @RestController
 @RequiredArgsConstructor
@@ -118,7 +101,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/signup")
-    public Authorization.signupDto signup(@RequestBody signUpForm form){
+    public Authorization.signupDto signup(@RequestBody SignUpForm form){
         return authorizationService.signup(form.getId(), form.getPassword(), form.getMobile_carrier(), form.getPhone());
     }
 

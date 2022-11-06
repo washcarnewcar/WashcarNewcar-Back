@@ -1,6 +1,9 @@
 package me.washcar.wcnc.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,20 +11,39 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Store {
+
+    @Builder
+    public Store(String name, String tel, String slug, String wayTo, String description, String previewImage, Boolean isApproved, StoreLocation storeLocation) {
+        this.name = name;
+        this.tel = tel;
+        this.slug = slug;
+        this.wayTo = wayTo;
+        this.description = description;
+        this.previewImage = previewImage;
+        this.isApproved = isApproved;
+    }
+
     @Id
     @GeneratedValue
     private Long storeId;
-
+    @Column(nullable = false)
     private String name;
 
-    private String profileUrl;
+    private String tel;
 
-    private String info;
+    @Column(nullable = false, unique = true)
+    private String slug;
 
     private String wayTo;
 
-    private String registrationNumber;
+    private String description;
+
+    private String previewImage;
+
+    @Column(nullable = false)
+    private Boolean isApproved;
 
     @OneToOne(mappedBy = "store")
     private StoreLocation storeLocation;

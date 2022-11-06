@@ -4,13 +4,6 @@ import lombok.Getter;
 
 public class StoreCreate {
 
-    //TODO 세차장승인요청-Dto
-    @Getter
-    public static class requestDto {
-        private int status;
-        private String message;
-    }
-
     //TODO slug중복확인-Dto
     @Getter
     public static class slugCheckDto {
