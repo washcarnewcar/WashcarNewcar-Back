@@ -1,6 +1,6 @@
 package me.washcar.wcnc.service.provider;
 
-import me.washcar.wcnc.dto.StatusCodeDto;
+import me.washcar.wcnc.dto._StatusCodeDto;
 import me.washcar.wcnc.dto.provider.StoreCreate;
 import me.washcar.wcnc.entity.Store;
 import me.washcar.wcnc.entity.StoreImage;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Objects;
 
 @Service
 public class StoreCreateService {
@@ -25,54 +26,79 @@ public class StoreCreateService {
     @Autowired
     StoreImageRepo storeImageRepo;
 
-    public StatusCodeDto request(NewStoreCreationForm form) {
+    public _StatusCodeDto request(NewStoreCreationForm form) {
 
-        if (storeRepo.findBySlug(form.getSlug()) != null) {
-            return new StatusCodeDto(1302, "slug 중복됨");
+        if (storeRepo.findBySlug(form.getSlug()) != null) return new _StatusCodeDto(1302, "slug 중복됨");
 
-        } else {
-            Store store = Store.builder()
-                    .name(form.getName())
-                    .tel(form.getTel())
-                    .slug(form.getSlug())
-                    .wayTo(form.getWayto())
-                    .description(form.getDescription())
-                    .previewImage(form.getPreview_image())
-                    .isChecked(false)
-                    .isApproved(false)
-                    .build();
+        Store store = Store.builder()
+                .name(form.getName())
+                .tel(form.getTel())
+                .slug(form.getSlug())
+                .wayTo(form.getWayto())
+                .description(form.getDescription())
+                .previewImage(form.getPreview_image())
+                .isChecked(false)
+                .isApproved(false)
+                .build();
+        storeRepo.save(store);
 
-            storeRepo.save(store);
+        StoreLocation storeLocation = StoreLocation.builder()
+                .address(form.getAddress())
+                .latitude(form.getCoordinate().getLatitude())
+                .longitude(form.getCoordinate().getLongitude())
+                .store(store)
+                .build();
+        storeLocationRepo.save(storeLocation);
 
-            StoreLocation storeLocation = StoreLocation.builder()
-                    .address(form.getAddress())
-                    .latitude(form.getCoordinate().getLatitude())
-                    .longitude(form.getCoordinate().getLongitude())
-                    .store(store)
-                    .build();
+        Collection<String> images = form.getStore_image();
+        images.forEach(image -> storeImageRepo.save(StoreImage.builder().imageUrl(image).store(store).build()));
 
-            storeLocationRepo.save(storeLocation);
 
-            Collection<String> images = form.getStore_image();
+        return new _StatusCodeDto(1300, "매장 승인 요청 성공");
+    }
 
-            for (String image: images) {
-                storeImageRepo.save(StoreImage.builder().imageUrl(image).store(store).build());
+    public _StatusCodeDto update(NewStoreCreationForm form, String slug) {
+
+        Store store = storeRepo.findBySlug(slug);
+        if (store != null) {
+
+            if(!Objects.equals(slug, form.getSlug())) {
+                if (storeRepo.findBySlug(form.getSlug()) != null) return new _StatusCodeDto(2502, "slug 중복됨");
             }
 
-            return new StatusCodeDto(1300, "매장 승인 요청 성공");
-        }
-    }
+            store.setName(form.getName());
+            store.setTel(form.getTel());
+            store.setSlug(form.getSlug());
+            store.setWayTo(form.getWayto());
+            store.setDescription(form.getDescription());
+            store.setPreviewImage(form.getPreview_image());
+            storeRepo.save(store);
 
-    //TODO slug중복확인-서비스
-    public StatusCodeDto slugCheck(String slug) {
-        if (storeRepo.findBySlug(slug) != null) {
-            return new StatusCodeDto(1401, "중복된 slug");
+            StoreLocation storeLocation = storeLocationRepo.findByStore(store);
+            storeLocation.setAddress(form.getAddress());
+            storeLocation.setLatitude(form.getCoordinate().getLatitude());
+            storeLocation.setLongitude(form.getCoordinate().getLongitude());
+            storeLocationRepo.save(storeLocation);
+
+            Collection<StoreImage> storeImages = storeImageRepo.findByStore(store);
+            storeImages.forEach(storeImage -> storeImageRepo.delete(storeImage));
+
+            Collection<String> imageStrings = form.getStore_image();
+            imageStrings.forEach(imageString -> storeImageRepo.save(StoreImage.builder().imageUrl(imageString).store(store).build()));
+
+            return new _StatusCodeDto(2500, "세차장 정보 수정 완료");
         } else {
-            return new StatusCodeDto(1400, "사용 가능한 slug");
+            return new _StatusCodeDto(-1, "세차장이 존재하지 않음");
         }
     }
 
-    //TODO 세차장승인상태확인-서비스
+    public _StatusCodeDto slugCheck(String slug) {
+        if (storeRepo.findBySlug(slug) != null) {
+            return new _StatusCodeDto(1401, "중복된 slug");
+        } else {
+            return new _StatusCodeDto(1400, "사용 가능한 slug");
+        }
+    }
     public StoreCreate.isApprovedDto isApproved(String slug) {
         Store store = storeRepo.findBySlug(slug);
         if(store == null) return new StoreCreate.isApprovedDto(-1, "error", "세차장이 존재하지 않음");

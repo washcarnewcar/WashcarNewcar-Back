@@ -1,6 +1,7 @@
 package me.washcar.wcnc.entity;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 @Entity
-@Getter
+@Data
 @NoArgsConstructor
 public class StoreLocation {
     @Builder

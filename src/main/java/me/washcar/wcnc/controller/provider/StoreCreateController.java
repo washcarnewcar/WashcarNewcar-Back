@@ -1,7 +1,7 @@
 package me.washcar.wcnc.controller.provider;
 
 import lombok.RequiredArgsConstructor;
-import me.washcar.wcnc.dto.StatusCodeDto;
+import me.washcar.wcnc.dto._StatusCodeDto;
 import me.washcar.wcnc.dto.provider.StoreCreate;
 import me.washcar.wcnc.form.NewStoreCreationForm;
 import me.washcar.wcnc.service.provider.StoreCreateService;
@@ -14,12 +14,17 @@ public class StoreCreateController {
     private final StoreCreateService storeCreateService;
 
     @PostMapping("/provider/new")
-    public StatusCodeDto request(@RequestBody NewStoreCreationForm form) {
+    public _StatusCodeDto request(@RequestBody NewStoreCreationForm form) {
         return storeCreateService.request(form);
     }
 
+    @PostMapping("/provider/{slug}/store")
+    public _StatusCodeDto update(@PathVariable String slug, @RequestBody NewStoreCreationForm form) {
+        return storeCreateService.update(form, slug);
+    }
+
     @GetMapping("/provider/check-slug/{slug}")
-    public StatusCodeDto slugCheck(@PathVariable String slug) {
+    public _StatusCodeDto slugCheck(@PathVariable String slug) {
         return storeCreateService.slugCheck(slug);
     }
 
