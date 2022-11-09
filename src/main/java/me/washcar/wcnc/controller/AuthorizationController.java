@@ -36,24 +36,24 @@ public class AuthorizationController {
     private final _UserService userService;
 
     @GetMapping("/super/users")
-    public ResponseEntity<List<User>>getUsers(){
+    public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
     @PostMapping("/super/user/save")
-    public ResponseEntity<User>saveUser(@RequestBody User user){
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/save").toUriString());
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 
     @PostMapping("/super/role/save")
-    public ResponseEntity<Role>saveRole(@RequestBody Role role){
+    public ResponseEntity<Role> saveRole(@RequestBody Role role) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/role/save").toUriString());
         return ResponseEntity.created(uri).body(userService.saveRole(role));
     }
 
     @PostMapping("/super/role/addtouser")
-    public ResponseEntity<Role>addRoleToUser(@RequestBody RoleToUserForm form){
+    public ResponseEntity<Role> addRoleToUser(@RequestBody RoleToUserForm form) {
         userService.addRoleToUser(form.getUserId(), form.getRoleName());
         return ResponseEntity.ok().build();
     }
@@ -61,7 +61,7 @@ public class AuthorizationController {
     @GetMapping("/refresh/token")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
-        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
                 Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
@@ -87,7 +87,7 @@ public class AuthorizationController {
             } catch (Exception exception) {
                 response.setHeader("error", exception.getMessage());
                 response.setStatus(FORBIDDEN.value());
-                //response.sendError(FORBIDDEN.value());
+                // response.sendError(FORBIDDEN.value());
 
                 Map<String, String> error = new HashMap<>();
                 error.put("error_message", exception.getMessage());
@@ -101,8 +101,13 @@ public class AuthorizationController {
     }
 
     @PostMapping("/signup")
-    public Authorization.signupDto signup(@RequestBody SignUpForm form){
+    public Authorization.signupDto signup(@RequestBody SignUpForm form) {
         return authorizationService.signup(form.getId(), form.getPassword(), form.getMobile_carrier(), form.getPhone());
+    }
+
+    @GetMapping("/user")
+    public void checkUser() {
+        return;
     }
 
 }
