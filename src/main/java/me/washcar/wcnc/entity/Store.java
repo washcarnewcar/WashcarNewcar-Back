@@ -1,16 +1,13 @@
 package me.washcar.wcnc.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
+@Data
 @NoArgsConstructor
 public class Store {
 
@@ -59,5 +56,11 @@ public class Store {
     private List<User_Store> user_stores = new ArrayList<>();
 
     @OneToMany(mappedBy = "store")
-    private List<Slot> slots = new ArrayList<>();
+    private List<Reservation> reservations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "store")
+    private List<StoreOption> storeOptions = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "store")
+//    private List<Slot> slots = new ArrayList<>();
 }

@@ -20,5 +20,8 @@ public class ReservationException {
     private ZonedDateTime exceptionEndDateTime;
 
     @ManyToOne
-    private Slot slot;
+    private Store store;
+
+//    @ManyToOne
+//    private Slot slot;
 }

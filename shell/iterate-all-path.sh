@@ -39,6 +39,7 @@ curl -X GET "http://$IP:$PORT/reservation/$RESERVATIONNUMBER"; echo;
 echo "\n[세차장관리사장님용]";
 echo "세차장승인요청";
 curl -X POST -H "Content-Type: application/json" -d '{}' "http://$IP:$PORT/provider/new"; echo;
+curl -X POST -H "Content-Type: application/json" -d '{}' "http://$IP:$PORT/provider/$SLUG/store"; echo;
 curl -X GET "http://$IP:$PORT/provider/check-slug/$SLUG"; echo;
 curl -X GET "http://$IP:$PORT/provider/$SLUG/approve"; echo;
 

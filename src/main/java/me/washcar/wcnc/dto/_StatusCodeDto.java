@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class StatusCodeDto {
+public class _StatusCodeDto {
     private int status;
     private String message;
 }
