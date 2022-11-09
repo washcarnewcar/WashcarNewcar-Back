@@ -25,8 +25,14 @@ public class Reservation {
     private User user;
 
     @ManyToOne
-    private Slot slot;
+    private Store store;
 
     @ManyToOne
-    private SlotOption slotOption;
+    private StoreOption storeOption;
+
+//    @ManyToOne
+//    private Slot slot;
+//
+//    @ManyToOne
+//    private SlotOption slotOption;
 }

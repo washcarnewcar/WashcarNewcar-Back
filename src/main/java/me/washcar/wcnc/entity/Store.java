@@ -56,5 +56,11 @@ public class Store {
     private List<User_Store> user_stores = new ArrayList<>();
 
     @OneToMany(mappedBy = "store")
-    private List<Slot> slots = new ArrayList<>();
+    private List<Reservation> reservations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "store")
+    private List<StoreOption> storeOptions = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "store")
+//    private List<Slot> slots = new ArrayList<>();
 }
