@@ -29,14 +29,14 @@ public class _UserServiceImpl implements _UserService, UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String userLoginId) throws UsernameNotFoundException {
-        User user = userRepo.findByUserLoginId(userLoginId);
+    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+        User user = userRepo.findByEmail(userEmail);
 
         if(user == null){
             log.error("User not found in the DB");
             throw new UsernameNotFoundException("User not found in the DB");
         } else {
-            log.info("User found in the database: {}", userLoginId);
+            log.info("User found in the database: {}", userEmail);
         }
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -44,12 +44,12 @@ public class _UserServiceImpl implements _UserService, UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
 
-        return new org.springframework.security.core.userdetails.User(user.getUserLoginId(), user.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
 
     @Override
     public User saveUser(User user) {
-        log.info("Saving new user {} into DB", user.getUserLoginId());
+        log.info("Saving new user {} into DB", user.getEmail());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepo.save(user);
     }
@@ -61,17 +61,17 @@ public class _UserServiceImpl implements _UserService, UserDetailsService {
     }
 
     @Override
-    public void addRoleToUser(String userLoginId, String roleName) {
-        log.info("Adding role {} to user {}", roleName, userLoginId);
-        User user = userRepo.findByUserLoginId(userLoginId);
+    public void addRoleToUser(String email, String roleName) {
+        log.info("Adding role {} to user {}", roleName, email);
+        User user = userRepo.findByEmail(email);
         Role role = roleRepo.findByName(roleName);
         user.getRoles().add(role);
     }
 
     @Override
-    public User getUser(String userLoginId) {
-        log.info("Fetching user {}", userLoginId);
-        return userRepo.findByUserLoginId(userLoginId);
+    public User getUser(String email) {
+        log.info("Fetching user {}", email);
+        return userRepo.findByEmail(email);
     }
 
     @Override

@@ -69,10 +69,10 @@ public class AuthorizationController {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
 
-                String userLoginId = decodedJWT.getSubject();
-                User user = userService.getUser(userLoginId);
+                String email = decodedJWT.getSubject();
+                User user = userService.getUser(email);
                 String access_token = JWT.create()
-                        .withSubject(user.getUserLoginId())
+                        .withSubject(user.getEmail())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))

@@ -20,9 +20,6 @@ public class User {
     private Long userId;
 
     @Column(nullable = false, unique = true)
-    private String userLoginId;
-
-    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)

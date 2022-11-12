@@ -32,24 +32,24 @@ public class WcncApplication {
             userService.saveRole(new Role(null, "ROLE_ADMIN"));
             userService.saveRole(new Role(null, "ROLE_SUPER_ADMIN"));
 
-            userService.saveUser(new User(null, "TestIdThis", "test@gmail.com", "password", "nicktest",
+            userService.saveUser(new User(null, "test@gmail.com", "password", "nicktest",
                     new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
-            userService.saveUser(new User(null, "hong", "hong@gmail.com", "hongPass", "gilt", new ArrayList<>(),
+            userService.saveUser(new User(null, "hong@gmail.com", "hongPass", "gilt", new ArrayList<>(),
                     new ArrayList<>(), new ArrayList<>()));
-            userService.saveUser(new User(null, "memememe", "me@gmail.com", "meme", "meisme", new ArrayList<>(),
+            userService.saveUser(new User(null, "me@gmail.com", "meme", "meisme", new ArrayList<>(),
                     new ArrayList<>(), new ArrayList<>()));
-            userService.saveUser(new User(null, "wcncadmin", "admin@naver.com", "adminpassword", "ADMIN",
+            userService.saveUser(new User(null, "admin@naver.com", "adminpassword", "ADMIN",
                     new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
 
-            userService.addRoleToUser("TestIdThis", "ROLE_USER");
-            userService.addRoleToUser("hong", "ROLE_MANAGER");
-            userService.addRoleToUser("hong", "ROLE_USER");
-            userService.addRoleToUser("hong", "ROLE_ADMIN");
-            userService.addRoleToUser("memememe", "ROLE_ADMIN");
-            userService.addRoleToUser("wcncadmin", "ROLE_USER");
-            userService.addRoleToUser("wcncadmin", "ROLE_MANAGER");
-            userService.addRoleToUser("wcncadmin", "ROLE_ADMIN");
-            userService.addRoleToUser("wcncadmin", "ROLE_SUPER_ADMIN");
+            userService.addRoleToUser("test@gmail.com", "ROLE_USER");
+            userService.addRoleToUser("hong@gmail.com", "ROLE_MANAGER");
+            userService.addRoleToUser("hong@gmail.com", "ROLE_USER");
+            userService.addRoleToUser("hong@gmail.com", "ROLE_ADMIN");
+            userService.addRoleToUser("me@gmail.com", "ROLE_ADMIN");
+            userService.addRoleToUser("admin@naver.com", "ROLE_USER");
+            userService.addRoleToUser("admin@naver.com", "ROLE_MANAGER");
+            userService.addRoleToUser("admin@naver.com", "ROLE_ADMIN");
+            userService.addRoleToUser("admin@naver.com", "ROLE_SUPER_ADMIN");
         };
     }
 }
