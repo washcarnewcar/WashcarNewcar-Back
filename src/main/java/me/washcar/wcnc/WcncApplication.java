@@ -15,16 +15,16 @@ import java.util.ArrayList;
 @SpringBootApplication
 public class WcncApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(WcncApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(WcncApplication.class, args);
+  }
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Bean
+    /*@Bean
     CommandLineRunner run(_UserService userService) {
         return args -> {
             userService.saveRole(new Role(null, "ROLE_USER"));
@@ -51,5 +51,5 @@ public class WcncApplication {
             userService.addRoleToUser("admin@naver.com", "ROLE_ADMIN");
             userService.addRoleToUser("admin@naver.com", "ROLE_SUPER_ADMIN");
         };
-    }
+    }*/
 }
