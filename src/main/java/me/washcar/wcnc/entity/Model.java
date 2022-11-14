@@ -7,13 +7,14 @@ import javax.persistence.*;
 @Entity
 @Getter
 public class Model {
-    @Id
-    @GeneratedValue
-    private Long modelId;
 
-    @Column(length = 127)
-    private String model;
+  @Id
+  @GeneratedValue
+  private Long modelId;
 
-    @ManyToOne
-    private Brand brand;
+  @Column(length = 127)
+  private String name;
+
+  @ManyToOne
+  private Brand brand;
 }

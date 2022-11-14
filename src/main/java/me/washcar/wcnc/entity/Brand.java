@@ -12,13 +12,13 @@ import java.util.List;
 @ToString
 public class Brand {
 
-    @Id
-    @GeneratedValue
-    private Long brandId;
+  @Id
+  @GeneratedValue
+  private Long brandId;
 
-    @Column(length = 127)
-    private String brand;
+  @Column(length = 127)
+  private String name;
 
-    @OneToMany(mappedBy = "brand")
-    private List<Model> models = new ArrayList<>();
+  @OneToMany(mappedBy = "brand")
+  private List<Model> models = new ArrayList<>();
 }
