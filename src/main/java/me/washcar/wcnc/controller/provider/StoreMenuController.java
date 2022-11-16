@@ -19,7 +19,7 @@ public class StoreMenuController {
   @PostMapping("/provider/{slug}/menu")
   public SuccessCreateDto createStoreMenu(
       @PathVariable String slug,
-      @Valid @RequestBody MenuDto menuDto
+      @Validated @RequestBody MenuDto menuDto
   ) {
     return SuccessCreateDto.getSuccessCreateDto(storeMenuService.createStoreMenu(slug, menuDto));
   }
