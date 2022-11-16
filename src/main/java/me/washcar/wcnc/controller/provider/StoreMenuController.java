@@ -1,41 +1,44 @@
 package me.washcar.wcnc.controller.provider;
 
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.washcar.wcnc.dto.provider.StoreMenu;
+import me.washcar.wcnc.dto.provider.StoreMenuDto.DeleteDto;
+import me.washcar.wcnc.dto.provider.StoreMenuDto.MenuDto;
+import me.washcar.wcnc.dto.provider.StoreMenuDto.SuccessCreateDto;
+import me.washcar.wcnc.dto.provider.StoreMenuDto.UpdateDto;
 import me.washcar.wcnc.service.provider.StoreMenuService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.ZonedDateTime;
 
 @RestController
 @RequiredArgsConstructor
 public class StoreMenuController {
 
-    private final StoreMenuService storeMenuService;
+  private final StoreMenuService storeMenuService;
 
-    @PostMapping("/provider/{slug}/menu/write")
-    public StoreMenu.createDto create(
-            @PathVariable String slug,
-            @RequestBody String body
-    ) {
-        return storeMenuService.create(slug, body);
-    }
+  @PostMapping("/provider/{slug}/menu")
+  public SuccessCreateDto createStoreMenu(
+      @PathVariable String slug,
+      @Valid @RequestBody MenuDto menuDto
+  ) {
+    return SuccessCreateDto.getSuccessCreateDto(storeMenuService.createStoreMenu(slug, menuDto));
+  }
 
-    @PatchMapping("/provider/{slug}/menu/{menuNumber}")
-    public StoreMenu.updateDto update(
-            @PathVariable String slug,
-            @PathVariable long menuNumber,
-            @RequestBody String body
-    ) {
-        return storeMenuService.update(slug, menuNumber, body);
-    }
+  @PutMapping("/provider/{slug}/menu/{storeOptionId}")
+  public UpdateDto updateStoreMenu(
+      @PathVariable String slug,
+      @PathVariable Long storeOptionId,
+      @RequestBody MenuDto menuDto
+  ) {
+    return storeMenuService.updateStoreMenu(slug, storeOptionId, menuDto);
+  }
 
-    @DeleteMapping("/provider/{slug}/menu/{menuNumber}")
-    public StoreMenu.updateDto delete(
-            @PathVariable String slug,
-            @PathVariable long menuNumber
-    ) {
-        return storeMenuService.delete(slug, menuNumber);
-    }
+  @DeleteMapping("/provider/{slug}/menu/{storeOptionId}")
+  public DeleteDto delete(
+      @PathVariable String slug,
+      @PathVariable Long storeOptionId
+  ) {
+    return storeMenuService.delete(slug, storeOptionId);
+  }
 }
 

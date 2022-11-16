@@ -1,6 +1,8 @@
 package me.washcar.wcnc.entity;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,26 +10,41 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import lombok.NonNull;
+import lombok.Setter;
+import me.washcar.wcnc.dto.provider.StoreMenuDto;
+import me.washcar.wcnc.dto.provider.StoreMenuDto.MenuDto;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class StoreOption {
-    @Id
-    @GeneratedValue
-    private Long storeOptionId;
 
-    private String image;
+  @Id
+  @GeneratedValue
+  private Long storeOptionId;
+  @NotNull
+  private String image;
+  @NotNull
+  private String name;
+  @NotNull
+  private String description;
+  @NotNull
+  private int price;
+  @NotNull
+  private String expected_time;
 
-    private String name;
+  @ManyToOne
+  private Store store;
 
-    private String description;
-
-    private int price;
-
-    private String expected_time;
-
-    @ManyToOne
-    private Store store;
+  public void updateStoreOption(MenuDto menuDto) {
+    this.setImage(menuDto.getImage());
+    this.setName(menuDto.getName());
+    this.setDescription(menuDto.getDescription());
+    this.setExpected_time(menuDto.getExpected_time());
+    this.setPrice(menuDto.getPrice());
+  }
 }
