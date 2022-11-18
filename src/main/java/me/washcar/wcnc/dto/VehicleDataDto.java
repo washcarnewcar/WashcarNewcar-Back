@@ -12,7 +12,7 @@ public class VehicleDataDto {
 
   @Getter
   @Builder
-  public static class BrandListDto {
+  public static class BrandDto {
 
     @NotNull
     private Long number;
@@ -20,8 +20,8 @@ public class VehicleDataDto {
     @NotNull
     private String name;
 
-    public static BrandListDto from(Brand brand) {
-      return BrandListDto.builder().number(brand.getBrandId()).name(brand.getName())
+    public static BrandDto from(Brand brand) {
+      return BrandDto.builder().number(brand.getBrandId()).name(brand.getName())
           .build();
     }
 
@@ -42,15 +42,15 @@ public class VehicleDataDto {
 
   @Getter
   @Builder
-  public static class ModelListDto {
+  public static class ModelDto {
 
     @NotNull
     private Long number;
     @NotNull
     private String name;
 
-    public static ModelListDto from(Model model) {
-      return ModelListDto.builder().number(model.getModelId()).name(model.getName())
+    public static ModelDto from(Model model) {
+      return ModelDto.builder().number(model.getModelId()).name(model.getName())
           .build();
     }
   }

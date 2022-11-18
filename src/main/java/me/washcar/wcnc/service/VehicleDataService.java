@@ -5,8 +5,8 @@ import static java.util.stream.Collectors.*;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.washcar.wcnc.dto.VehicleDataDto.BrandListDto;
-import me.washcar.wcnc.dto.VehicleDataDto.ModelListDto;
+import me.washcar.wcnc.dto.VehicleDataDto.BrandDto;
+import me.washcar.wcnc.dto.VehicleDataDto.ModelDto;
 import me.washcar.wcnc.entity.Brand;
 import me.washcar.wcnc.entity.Model;
 import me.washcar.wcnc.repository.BrandRepository;
@@ -22,13 +22,13 @@ public class VehicleDataService {
 
   private final ModelRepository modelRepository;
 
-  public List<BrandListDto> brandList() {
+  public List<BrandDto> brandList() {
     List<Brand> brands = brandRepository.findAll();
-    return brands.stream().map(BrandListDto::from).collect(toList());
+    return brands.stream().map(BrandDto::from).collect(toList());
   }
 
-  public List<ModelListDto> modelList(Long brandId) {
+  public List<ModelDto> modelList(Long brandId) {
     List<Model> models = modelRepository.findAllByBrand_BrandId(brandId);
-    return models.stream().map(ModelListDto::from).collect(toList());
+    return models.stream().map(ModelDto::from).collect(toList());
   }
 }
