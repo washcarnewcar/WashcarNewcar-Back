@@ -1,30 +1,44 @@
 package me.washcar.wcnc.service.provider;
 
+import lombok.extern.slf4j.Slf4j;
 import me.washcar.wcnc.dto._StatusCodeDto;
 import me.washcar.wcnc.dto.provider.StoreCreate;
 import me.washcar.wcnc.entity.Store;
 import me.washcar.wcnc.entity.StoreImage;
 import me.washcar.wcnc.entity.StoreLocation;
+import me.washcar.wcnc.entity.User;
 import me.washcar.wcnc.form.NewStoreCreationForm;
 import me.washcar.wcnc.repository.StoreImageRepo;
 import me.washcar.wcnc.repository.StoreLocationRepo;
 import me.washcar.wcnc.repository.StoreRepository;
+import me.washcar.wcnc.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
+@Slf4j
 public class StoreCreateService {
 
   @Autowired
   StoreRepository storeRepository;
   @Autowired
   StoreLocationRepo storeLocationRepo;
-
   @Autowired
   StoreImageRepo storeImageRepo;
+  @Autowired
+  UserRepo userRepo;
+
+  public void addStoreToUser(String email, String slug) {
+    log.info("Adding store {} to user {}", slug, email);
+    User user = userRepo.findByEmail(email);
+    Store store = storeRepository.findBySlug(slug).orElse(null);
+    user.getStores().add(store);
+    userRepo.save(user);
+  }
 
   public _StatusCodeDto request(NewStoreCreationForm form) {
 

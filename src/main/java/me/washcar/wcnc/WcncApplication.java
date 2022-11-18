@@ -3,6 +3,7 @@ package me.washcar.wcnc;
 import me.washcar.wcnc.entity.Role;
 import me.washcar.wcnc.entity.User;
 import me.washcar.wcnc.service._UserService;
+import me.washcar.wcnc.service.provider.StoreCreateService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,9 +26,9 @@ public class WcncApplication {
     return new BCryptPasswordEncoder();
   }
 
-//    @Bean
-//    CommandLineRunner run(_UserService userService) {
-//        return args -> {
+    @Bean
+    CommandLineRunner run(_UserService userService, StoreCreateService storeCreateService) {
+        return args -> {
 //            userService.saveRole(new Role(null, "ROLE_USER"));
 //            userService.saveRole(new Role(null, "ROLE_MANAGER"));
 //            userService.saveRole(new Role(null, "ROLE_ADMIN"));
@@ -51,6 +52,9 @@ public class WcncApplication {
 //            userService.addRoleToUser("admin@naver.com", "ROLE_MANAGER");
 //            userService.addRoleToUser("admin@naver.com", "ROLE_ADMIN");
 //            userService.addRoleToUser("admin@naver.com", "ROLE_SUPER_ADMIN");
-//        };
-//    }
+//
+//              storeCreateService.addStoreToUser("admin@naver.com", "stylecarcare");
+
+        };
+    }
 }

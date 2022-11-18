@@ -47,9 +47,6 @@ public class Store {
     @Column(nullable = false)
     private Boolean isChecked;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "store")
-    private StoreLocation storeLocation;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
     private List<StoreImage> storeImages = new ArrayList<>();
 
