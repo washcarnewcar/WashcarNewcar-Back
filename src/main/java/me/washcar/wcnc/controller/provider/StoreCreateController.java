@@ -7,6 +7,8 @@ import me.washcar.wcnc.form.NewStoreCreationForm;
 import me.washcar.wcnc.service.provider.StoreCreateService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +33,11 @@ public class StoreCreateController {
     @GetMapping("/provider/{slug}/approve")
     public StoreCreate.isApprovedDto isApproved(@PathVariable String slug) {
         return storeCreateService.isApproved(slug);
+    }
+
+    @GetMapping("/provider/slug")
+    public StoreCreate.getSlugDto getSlug(HttpServletRequest request) {
+        return storeCreateService.getSlug(request);
     }
 }
 

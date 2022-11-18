@@ -1,5 +1,9 @@
 package me.washcar.wcnc.service.provider;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
 import me.washcar.wcnc.dto._StatusCodeDto;
 import me.washcar.wcnc.dto.provider.StoreCreate;
@@ -12,12 +16,16 @@ import me.washcar.wcnc.repository.StoreImageRepo;
 import me.washcar.wcnc.repository.StoreLocationRepo;
 import me.washcar.wcnc.repository.StoreRepository;
 import me.washcar.wcnc.repository.UserRepo;
+import me.washcar.wcnc.service._UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Service
 @Slf4j
@@ -31,6 +39,9 @@ public class StoreCreateService {
   StoreImageRepo storeImageRepo;
   @Autowired
   UserRepo userRepo;
+
+  @Autowired
+  _UserService userService;
 
   public void addStoreToUser(String email, String slug) {
     log.info("Adding store {} to user {}", slug, email);
@@ -131,5 +142,25 @@ public class StoreCreateService {
           return new StoreCreate.isApprovedDto(1500, "세차장이 승인되었으며, 페이지가 운영중", "");
       }
     return new StoreCreate.isApprovedDto(1502, "세차장 승인 거부", "");
+  }
+
+  public StoreCreate.getSlugDto getSlug(HttpServletRequest request) {
+
+    String authorizationHeader = request.getHeader(AUTHORIZATION);
+    String refresh_token = authorizationHeader.substring("Bearer ".length());
+    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+
+    JWTVerifier verifier = JWT.require(algorithm).build();
+    DecodedJWT decodedJWT = verifier.verify(refresh_token);
+
+    String email = decodedJWT.getSubject();
+    User user = userService.getUser(email);
+
+    if(user.getStores().isEmpty()){
+      return new StoreCreate.getSlugDto(2601, "세차장 등록하지 않음", "null");
+    } else {
+      Store userStore = user.getStores().iterator().next();
+      return new StoreCreate.getSlugDto(2600, "세차장 등록함", userStore.getSlug());
+    }
   }
 }
