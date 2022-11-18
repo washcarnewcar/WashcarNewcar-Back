@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -34,10 +36,10 @@ public class User {
 //    private ZonedDateTime lastLoginDateTime;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles = new ArrayList<>();
+    private Set<Store> stores = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<User_Store> user_stores = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private List<Reservation> reservations = new ArrayList<>();

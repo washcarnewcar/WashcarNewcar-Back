@@ -26,6 +26,7 @@ public class Store {
     @Id
     @GeneratedValue
     private Long storeId;
+
     @Column(nullable = false)
     private String name;
 
@@ -46,21 +47,16 @@ public class Store {
     @Column(nullable = false)
     private Boolean isChecked;
 
-    @OneToOne(mappedBy = "store")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "store")
     private StoreLocation storeLocation;
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
     private List<StoreImage> storeImages = new ArrayList<>();
-
-    @OneToMany(mappedBy = "store")
-    private List<User_Store> user_stores = new ArrayList<>();
 
     @OneToMany(mappedBy = "store")
     private List<Reservation> reservations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
     private List<StoreOption> storeOptions = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "store")
-//    private List<Slot> slots = new ArrayList<>();
 }
