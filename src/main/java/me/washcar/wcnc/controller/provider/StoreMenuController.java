@@ -1,6 +1,5 @@
 package me.washcar.wcnc.controller.provider;
 
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.dto.provider.StoreMenuDto.DeleteDto;
 import me.washcar.wcnc.dto.provider.StoreMenuDto.MenuDto;
@@ -34,11 +33,11 @@ public class StoreMenuController {
   }
 
   @DeleteMapping("/provider/{slug}/menu/{storeOptionId}")
-  public DeleteDto delete(
+  public DeleteDto deleteStoreMenu(
       @PathVariable String slug,
       @PathVariable Long storeOptionId
   ) {
-    return storeMenuService.delete(slug, storeOptionId);
+    return storeMenuService.deleteStoreMenu(slug, storeOptionId);
   }
 }
 

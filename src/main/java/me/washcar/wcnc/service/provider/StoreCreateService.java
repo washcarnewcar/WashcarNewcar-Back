@@ -53,9 +53,9 @@ public class StoreCreateService {
 
   public _StatusCodeDto request(NewStoreCreationForm form) {
 
-      if (storeRepository.findBySlug(form.getSlug()).orElse(null) != null) {
-          return new _StatusCodeDto(1302, "slug 중복됨");
-      }
+    if (storeRepository.findBySlug(form.getSlug()).orElse(null) != null) {
+      return new _StatusCodeDto(1302, "slug 중복됨");
+    }
 
     Store store = Store.builder()
         .name(form.getName())
@@ -90,9 +90,9 @@ public class StoreCreateService {
     if (store != null) {
 
       if (!Objects.equals(slug, form.getSlug())) {
-          if (storeRepository.findBySlug(form.getSlug()) != null) {
-              return new _StatusCodeDto(2502, "slug 중복됨");
-          }
+        if (storeRepository.findBySlug(form.getSlug()).orElse(null) != null) {
+          return new _StatusCodeDto(2502, "slug 중복됨");
+        }
       }
 
       store.setName(form.getName());
@@ -123,7 +123,7 @@ public class StoreCreateService {
   }
 
   public _StatusCodeDto slugCheck(String slug) {
-    if (storeRepository.findBySlug(slug) != null) {
+    if (storeRepository.findBySlug(slug).orElse(null) != null) {
       return new _StatusCodeDto(1401, "중복된 slug");
     } else {
       return new _StatusCodeDto(1400, "사용 가능한 slug");
@@ -132,15 +132,15 @@ public class StoreCreateService {
 
   public StoreCreate.isApprovedDto isApproved(String slug) {
     Store store = storeRepository.findBySlug(slug).orElse(null);
-      if (store == null) {
-          return new StoreCreate.isApprovedDto(-1, "error", "세차장이 존재하지 않음");
-      }
-      if (!store.getIsChecked()) {
-          return new StoreCreate.isApprovedDto(1501, "세차장 승인 대기중", "");
-      }
-      if (store.getIsApproved()) {
-          return new StoreCreate.isApprovedDto(1500, "세차장이 승인되었으며, 페이지가 운영중", "");
-      }
+    if (store == null) {
+      return new StoreCreate.isApprovedDto(-1, "error", "세차장이 존재하지 않음");
+    }
+    if (!store.getIsChecked()) {
+      return new StoreCreate.isApprovedDto(1501, "세차장 승인 대기중", "");
+    }
+    if (store.getIsApproved()) {
+      return new StoreCreate.isApprovedDto(1500, "세차장이 승인되었으며, 페이지가 운영중", "");
+    }
     return new StoreCreate.isApprovedDto(1502, "세차장 승인 거부", "");
   }
 
@@ -156,7 +156,7 @@ public class StoreCreateService {
     String email = decodedJWT.getSubject();
     User user = userService.getUser(email);
 
-    if(user.getStores().isEmpty()){
+    if (user.getStores().isEmpty()) {
       return new StoreCreate.getSlugDto(2601, "세차장 등록하지 않음", "null");
     } else {
       Store userStore = user.getStores().iterator().next();

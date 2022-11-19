@@ -48,7 +48,7 @@ public class StoreMenuService {
     return getUpdateDto();
   }
 
-  public DeleteDto delete(String slug, Long storeOptionId) {
+  public DeleteDto deleteStoreMenu(String slug, Long storeOptionId) {
     // TODO: 해당 slug의 store을 찾을 수 없으면 Custom Exception을 던져야 함.
     Store store = storeRepository.findBySlug(slug).orElse(null); // 없어도 구현 가능..
     StoreOption storeOption = storeOptionRepository.findById(storeOptionId).orElse(null);
