@@ -12,7 +12,7 @@ import me.washcar.wcnc.entity.StoreImage;
 import me.washcar.wcnc.entity.StoreLocation;
 import me.washcar.wcnc.entity.User;
 import me.washcar.wcnc.form.NewStoreCreationForm;
-import me.washcar.wcnc.repository.StoreImageRepo;
+import me.washcar.wcnc.repository.StoreImageRepository;
 import me.washcar.wcnc.repository.StoreLocationRepo;
 import me.washcar.wcnc.repository.StoreRepository;
 import me.washcar.wcnc.repository.UserRepo;
@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -36,7 +35,7 @@ public class StoreCreateService {
   @Autowired
   StoreLocationRepo storeLocationRepo;
   @Autowired
-  StoreImageRepo storeImageRepo;
+  StoreImageRepository storeImageRepository;
   @Autowired
   UserRepo userRepo;
 
@@ -60,6 +59,7 @@ public class StoreCreateService {
     Store store = Store.builder()
         .name(form.getName())
         .tel(form.getTel())
+        .address(form.getAddress())
         .slug(form.getSlug())
         .wayTo(form.getWayto())
         .description(form.getDescription())
@@ -79,7 +79,7 @@ public class StoreCreateService {
 
     Collection<String> images = form.getStore_image();
     images.forEach(
-        image -> storeImageRepo.save(StoreImage.builder().imageUrl(image).store(store).build()));
+        image -> storeImageRepository.save(StoreImage.builder().imageUrl(image).store(store).build()));
 
     return new _StatusCodeDto(1300, "매장 승인 요청 성공");
   }
@@ -97,6 +97,7 @@ public class StoreCreateService {
 
       store.setName(form.getName());
       store.setTel(form.getTel());
+      store.setAddress(form.getAddress());
       store.setSlug(form.getSlug());
       store.setWayTo(form.getWayto());
       store.setDescription(form.getDescription());
@@ -109,11 +110,11 @@ public class StoreCreateService {
       storeLocation.setLongitude(form.getCoordinate().getLongitude());
       storeLocationRepo.save(storeLocation);
 
-      Collection<StoreImage> storeImages = storeImageRepo.findByStore(store);
-      storeImages.forEach(storeImage -> storeImageRepo.delete(storeImage));
+      Collection<StoreImage> storeImages = storeImageRepository.findByStore(store);
+      storeImages.forEach(storeImage -> storeImageRepository.delete(storeImage));
 
       Collection<String> imageStrings = form.getStore_image();
-      imageStrings.forEach(imageString -> storeImageRepo.save(
+      imageStrings.forEach(imageString -> storeImageRepository.save(
           StoreImage.builder().imageUrl(imageString).store(store).build()));
 
       return new _StatusCodeDto(2500, "세차장 정보 수정 완료");

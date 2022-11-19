@@ -11,49 +11,54 @@ import java.util.List;
 @NoArgsConstructor
 public class Store {
 
-    @Builder
-    public Store(String name, String tel, String slug, String wayTo, String description, String previewImage, Boolean isApproved, Boolean isChecked) {
-        this.name = name;
-        this.tel = tel;
-        this.slug = slug;
-        this.wayTo = wayTo;
-        this.description = description;
-        this.previewImage = previewImage;
-        this.isApproved = isApproved;
-        this.isChecked = isChecked;
-    }
+  @Builder
+  public Store(String name, String tel, String address, String slug, String wayTo,
+      String description,
+      String previewImage, Boolean isApproved, Boolean isChecked) {
+    this.name = name;
+    this.tel = tel;
+    this.address = address;
+    this.description = description;
+    this.slug = slug;
+    this.wayTo = wayTo;
+    this.previewImage = previewImage;
+    this.isApproved = isApproved;
+    this.isChecked = isChecked;
+  }
 
-    @Id
-    @GeneratedValue
-    private Long storeId;
+  @Id
+  @GeneratedValue
+  private Long storeId;
 
-    @Column(nullable = false)
-    private String name;
+  @Column(nullable = false)
+  private String name;
 
-    private String tel;
+  private String tel;
 
-    @Column(nullable = false, unique = true)
-    private String slug;
+  private String address;
 
-    private String wayTo;
+  @Column(nullable = false, unique = true)
+  private String slug;
 
-    private String description;
+  private String wayTo;
 
-    private String previewImage;
+  private String description;
 
-    @Column(nullable = false)
-    private Boolean isApproved;
+  private String previewImage;
 
-    @Column(nullable = false)
-    private Boolean isChecked;
+  @Column(nullable = false)
+  private Boolean isApproved;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
-    private List<StoreImage> storeImages = new ArrayList<>();
+  @Column(nullable = false)
+  private Boolean isChecked;
 
-    @OneToMany(mappedBy = "store")
-    private List<Reservation> reservations = new ArrayList<>();
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
+  private List<StoreImage> storeImages = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
-    private List<StoreOption> storeOptions = new ArrayList<>();
+  @OneToMany(mappedBy = "store")
+  private List<Reservation> reservations = new ArrayList<>();
+
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
+  private List<StoreOption> storeOptions = new ArrayList<>();
 
 }
