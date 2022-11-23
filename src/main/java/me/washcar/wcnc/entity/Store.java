@@ -12,12 +12,13 @@ import java.util.List;
 public class Store {
 
   @Builder
-  public Store(String name, String tel, String address, String slug, String wayTo,
+  public Store(String name, String tel, String address, String addressDetail, String slug, String wayTo,
       String description,
       String previewImage, Boolean isApproved, Boolean isChecked) {
     this.name = name;
     this.tel = tel;
     this.address = address;
+    this.addressDetail = addressDetail;
     this.description = description;
     this.slug = slug;
     this.wayTo = wayTo;
@@ -36,6 +37,8 @@ public class Store {
   private String tel;
 
   private String address;
+
+  private String addressDetail;
 
   @Column(nullable = false, unique = true)
   private String slug;

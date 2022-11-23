@@ -55,6 +55,7 @@ public class StoreCreateService {
         .name(form.getName())
         .tel(form.getTel())
         .address(form.getAddress())
+        .addressDetail(form.getAddress_detail())
         .slug(form.getSlug())
         .wayTo(form.getWayto())
         .description(form.getDescription())
@@ -96,6 +97,7 @@ public class StoreCreateService {
       store.setName(form.getName());
       store.setTel(form.getTel());
       store.setAddress(form.getAddress());
+      store.setAddressDetail(form.getAddress_detail());
       store.setSlug(form.getSlug());
       store.setWayTo(form.getWayto());
       store.setDescription(form.getDescription());
