@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
+    private final AuthenticationEntryPointImpl authenticationEntryPoint;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -34,6 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // customAuthenticationFilter.setFilterProcessesUrl("/test/login");
 
         http.cors().and().csrf().disable();
+        http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/login", "/refresh/token", "/status/**").permitAll();
         http.authorizeRequests().antMatchers("/super/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
