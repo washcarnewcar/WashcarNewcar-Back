@@ -53,7 +53,6 @@ public class WcncApplication {
 //            userService.addRoleToUser("admin@naver.com", "ROLE_ADMIN");
 //            userService.addRoleToUser("admin@naver.com", "ROLE_SUPER_ADMIN");
 //
-//              storeCreateService.addStoreToUser("admin@naver.com", "stylecarcare");
 
         };
     }
