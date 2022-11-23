@@ -76,6 +76,9 @@ public class StoreCreateService {
     images.forEach(
         image -> storeImageRepository.save(StoreImage.builder().imageUrl(image).store(store).build()));
 
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    addStoreToUser(authentication.getPrincipal().toString(), form.getSlug());
+
     return new _StatusCodeDto(1300, "매장 승인 요청 성공");
   }
 
