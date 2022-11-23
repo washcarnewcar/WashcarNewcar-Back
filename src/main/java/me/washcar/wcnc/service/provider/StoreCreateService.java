@@ -119,6 +119,18 @@ public class StoreCreateService {
   }
 
   public _StatusCodeDto slugCheck(String slug) {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = userService.getUser(authentication.getPrincipal().toString());
+
+    if (!user.getStores().isEmpty()) {
+      Store userStore = user.getStores().iterator().next();
+      if(Objects.equals(slug, userStore.getSlug())) {
+        return new _StatusCodeDto(1400, "사용 가능한 slug");
+      }
+    }
+
+
     if (storeRepository.findBySlug(slug).orElse(null) != null) {
       return new _StatusCodeDto(1401, "중복된 slug");
     } else {
