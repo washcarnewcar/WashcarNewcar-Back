@@ -5,10 +5,9 @@ import me.washcar.wcnc.dto._StatusCodeDto;
 import me.washcar.wcnc.dto.provider.StoreCreate;
 import me.washcar.wcnc.form.NewStoreCreationForm;
 import me.washcar.wcnc.service.provider.StoreCreateService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -36,8 +35,9 @@ public class StoreCreateController {
     }
 
     @GetMapping("/provider/slug")
-    public StoreCreate.getSlugDto getSlug(HttpServletRequest request) {
-        return storeCreateService.getSlug(request);
+    public StoreCreate.getSlugDto getSlug() {
+
+        return storeCreateService.getSlug();
     }
 }
 
