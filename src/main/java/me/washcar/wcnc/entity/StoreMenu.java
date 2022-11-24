@@ -10,9 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import lombok.NonNull;
 import lombok.Setter;
-import me.washcar.wcnc.dto.provider.StoreMenuDto;
 import me.washcar.wcnc.dto.provider.StoreMenuDto.MenuDto;
 
 @Entity
@@ -21,11 +19,11 @@ import me.washcar.wcnc.dto.provider.StoreMenuDto.MenuDto;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StoreOption {
+public class StoreMenu {
 
   @Id
   @GeneratedValue
-  private Long storeOptionId;
+  private Long storeMenuId;
   @NotNull
   private String image;
   @NotNull
@@ -40,7 +38,7 @@ public class StoreOption {
   @ManyToOne
   private Store store;
 
-  public void updateStoreOption(MenuDto menuDto) {
+  public void updateStoreMenu(MenuDto menuDto) {
     this.setImage(menuDto.getImage());
     this.setName(menuDto.getName());
     this.setDescription(menuDto.getDescription());

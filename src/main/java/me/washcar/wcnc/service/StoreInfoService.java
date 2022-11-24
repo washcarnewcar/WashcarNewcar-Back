@@ -10,7 +10,7 @@ import me.washcar.wcnc.dto.StoreInfo.StoreMenuDto;
 import me.washcar.wcnc.dto.StoreInfo.StoreDetailDto;
 import me.washcar.wcnc.entity.Store;
 import me.washcar.wcnc.entity.StoreImage;
-import me.washcar.wcnc.entity.StoreOption;
+import me.washcar.wcnc.entity.StoreMenu;
 import me.washcar.wcnc.repository.StoreImageRepository;
 import me.washcar.wcnc.repository.StoreRepository;
 import org.springframework.stereotype.Service;
@@ -43,8 +43,8 @@ public class StoreInfoService {
   public List<StoreMenuDto> getStoreMenu(String slug) {
     // TODO: 해당 slug의 store을 찾을 수 없으면 Custom Exception을 던져야 함.
     Store store = storeRepository.findBySlug(slug).orElse(null);
-    List<StoreOption> storeOptions = store.getStoreOptions();
-    return storeOptions.stream().map(StoreMenuDto::from).collect(Collectors.toList());
+    List<StoreMenu> storeMenus = store.getStoreMenus();
+    return storeMenus.stream().map(StoreMenuDto::from).collect(Collectors.toList());
   }
 
   //TODO 세차장세부정보-서비스

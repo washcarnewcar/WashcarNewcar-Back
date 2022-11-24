@@ -28,7 +28,7 @@ public class Reservation {
     private Store store;
 
     @ManyToOne
-    private StoreOption storeOption;
+    private StoreMenu storeMenu;
 
 //    @ManyToOne
 //    private Slot slot;

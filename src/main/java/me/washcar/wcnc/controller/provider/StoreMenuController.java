@@ -23,21 +23,21 @@ public class StoreMenuController {
     return SuccessCreateDto.getSuccessCreateDto(storeMenuService.createStoreMenu(slug, menuDto));
   }
 
-  @PutMapping("/provider/{slug}/menu/{storeOptionId}")
+  @PutMapping("/provider/{slug}/menu/{menuId}")
   public UpdateDto updateStoreMenu(
       @PathVariable String slug,
-      @PathVariable Long storeOptionId,
+      @PathVariable Long menuId,
       @RequestBody MenuDto menuDto
   ) {
-    return storeMenuService.updateStoreMenu(slug, storeOptionId, menuDto);
+    return storeMenuService.updateStoreMenu(slug, menuId, menuDto);
   }
 
-  @DeleteMapping("/provider/{slug}/menu/{storeOptionId}")
+  @DeleteMapping("/provider/{slug}/menu/{menuId}")
   public DeleteDto deleteStoreMenu(
       @PathVariable String slug,
-      @PathVariable Long storeOptionId
+      @PathVariable Long menuId
   ) {
-    return storeMenuService.deleteStoreMenu(slug, storeOptionId);
+    return storeMenuService.deleteStoreMenu(slug, menuId);
   }
 }
 

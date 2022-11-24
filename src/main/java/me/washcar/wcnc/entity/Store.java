@@ -65,7 +65,7 @@ public class Store {
   private List<Reservation> reservations = new ArrayList<>();
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
-  private List<StoreOption> storeOptions = new ArrayList<>();
+  private List<StoreMenu> storeMenus = new ArrayList<>();
 
   @OneToOne
   private StoreLocation storeLocation;

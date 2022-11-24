@@ -8,8 +8,8 @@ import me.washcar.wcnc.dto.provider.StoreMenuDto.DeleteDto;
 import me.washcar.wcnc.dto.provider.StoreMenuDto.MenuDto;
 import me.washcar.wcnc.dto.provider.StoreMenuDto.UpdateDto;
 import me.washcar.wcnc.entity.Store;
-import me.washcar.wcnc.entity.StoreOption;
-import me.washcar.wcnc.repository.StoreOptionRepository;
+import me.washcar.wcnc.entity.StoreMenu;
+import me.washcar.wcnc.repository.StoreMenuRepository;
 import me.washcar.wcnc.repository.StoreRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +19,16 @@ public class StoreMenuService {
 
   private final StoreRepository storeRepository;
 
-  private final StoreOptionRepository storeOptionRepository;
+  private final StoreMenuRepository storeMenuRepository;
 
   public Long createStoreMenu(String slug, MenuDto menuDto) {
     // TODO: 해당 slug의 store을 찾을 수 없으면 Custom Exception을 던져야 함.
     Store store = storeRepository.findBySlug(slug).orElse(null);
-    return storeOptionRepository.save(generateStoreOption(store, menuDto)).getStoreOptionId();
+    return storeMenuRepository.save(generateStoreMenu(store, menuDto)).getStoreMenuId();
   }
 
-  private StoreOption generateStoreOption(Store store, MenuDto menuDto) {
-    return StoreOption.builder()
+  private StoreMenu generateStoreMenu(Store store, MenuDto menuDto) {
+    return StoreMenu.builder()
         .image(menuDto.getImage())
         .name(menuDto.getName())
         .description(menuDto.getDescription())
@@ -38,21 +38,21 @@ public class StoreMenuService {
         .build();
   }
 
-  public UpdateDto updateStoreMenu(String slug, Long storeOptionId, MenuDto menuDto) {
+  public UpdateDto updateStoreMenu(String slug, Long menuId, MenuDto menuDto) {
     // TODO: 해당 slug의 store을 찾을 수 없으면 Custom Exception을 던져야 함.
     Store store = storeRepository.findBySlug(slug).orElse(null); // 없어도 구현 가능..
     // TODO: 해당 id의 storeOption을 찾을 수 없으면 Custom Exception을 던져야 함.
-    StoreOption storeOption = storeOptionRepository.findById(storeOptionId).orElse(null);
-    storeOption.updateStoreOption(menuDto);
-    storeOptionRepository.save(storeOption);
+    StoreMenu storeMenu = storeMenuRepository.findById(menuId).orElse(null);
+    storeMenu.updateStoreMenu(menuDto);
+    storeMenuRepository.save(storeMenu);
     return getUpdateDto();
   }
 
-  public DeleteDto deleteStoreMenu(String slug, Long storeOptionId) {
+  public DeleteDto deleteStoreMenu(String slug, Long menuId) {
     // TODO: 해당 slug의 store을 찾을 수 없으면 Custom Exception을 던져야 함.
     Store store = storeRepository.findBySlug(slug).orElse(null); // 없어도 구현 가능..
-    StoreOption storeOption = storeOptionRepository.findById(storeOptionId).orElse(null);
-    storeOptionRepository.delete(storeOption);
+    StoreMenu storeMenu = storeMenuRepository.findById(menuId).orElse(null);
+    storeMenuRepository.delete(storeMenu);
     return getDeleteDto();
   }
 }

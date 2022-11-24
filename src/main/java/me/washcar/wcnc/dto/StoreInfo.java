@@ -8,7 +8,7 @@ import java.util.List;
 import lombok.Setter;
 import me.washcar.wcnc.entity.Store;
 import me.washcar.wcnc.entity.StoreImage;
-import me.washcar.wcnc.entity.StoreOption;
+import me.washcar.wcnc.entity.StoreMenu;
 
 public class StoreInfo {
 
@@ -48,12 +48,12 @@ public class StoreInfo {
     private String detail;
     private int price;
 
-    public static StoreMenuDto from(StoreOption storeOption) {
-      return StoreMenuDto.builder().number(storeOption.getStoreOptionId())
-          .image(storeOption.getImage())
-          .name(storeOption.getName())
-          .detail(storeOption.getDescription())
-          .price(storeOption.getPrice())
+    public static StoreMenuDto from(StoreMenu storeMenu) {
+      return StoreMenuDto.builder().number(storeMenu.getStoreMenuId())
+          .image(storeMenu.getImage())
+          .name(storeMenu.getName())
+          .detail(storeMenu.getDescription())
+          .price(storeMenu.getPrice())
           .build();
     }
   }
