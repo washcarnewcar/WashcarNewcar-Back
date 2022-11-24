@@ -19,7 +19,7 @@ public class StoreInfo {
     private List<Object> store;
   }
 
-  //TODO 세차장정보-Dto
+  // 세차장정보-Dto
   @Getter
   @Builder
   public static class StoreInfoDto {
@@ -37,7 +37,7 @@ public class StoreInfo {
     }
   }
 
-  //TODO 세차장메뉴-Dto
+  // 세차장메뉴-Dto
   @Getter
   @Builder
   public static class StoreMenuDto {
@@ -71,7 +71,7 @@ public class StoreInfo {
     }
   }
 
-  //TODO 세차장세부정보-Dto
+  // 세차장세부정보-Dto
   @Getter
   @Builder
   public static class StoreDetailDto {

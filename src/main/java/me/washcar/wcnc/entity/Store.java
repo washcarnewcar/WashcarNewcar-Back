@@ -9,10 +9,13 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Store {
 
   @Builder
-  public Store(String name, String tel, String address, String addressDetail, String slug, String wayTo,
+  public Store(String name, String tel, String address, String addressDetail, String slug,
+      String wayTo,
       String description,
       String previewImage, Boolean isApproved, Boolean isChecked) {
     this.name = name;
@@ -64,4 +67,6 @@ public class Store {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
   private List<StoreOption> storeOptions = new ArrayList<>();
 
+  @OneToOne
+  private StoreLocation storeLocation;
 }

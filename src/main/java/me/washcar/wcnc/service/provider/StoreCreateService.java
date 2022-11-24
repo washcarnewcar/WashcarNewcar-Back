@@ -1,17 +1,19 @@
 package me.washcar.wcnc.service.provider;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.washcar.wcnc.dto._StatusCodeDto;
 import me.washcar.wcnc.dto.provider.StoreCreate;
+import me.washcar.wcnc.dto.provider.StoreCreate.StoreAllInfoDto;
 import me.washcar.wcnc.entity.Store;
 import me.washcar.wcnc.entity.StoreImage;
 import me.washcar.wcnc.entity.StoreLocation;
 import me.washcar.wcnc.entity.User;
 import me.washcar.wcnc.form.NewStoreCreationForm;
 import me.washcar.wcnc.repository.StoreImageRepository;
-import me.washcar.wcnc.repository.StoreLocationRepo;
+import me.washcar.wcnc.repository.StoreLocationRepository;
 import me.washcar.wcnc.repository.StoreRepository;
-import me.washcar.wcnc.repository.UserRepo;
+import me.washcar.wcnc.repository.UserRepository;
 import me.washcar.wcnc.service._UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,25 +26,26 @@ import java.util.Objects;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class StoreCreateService {
 
   @Autowired
-  StoreRepository storeRepository;
+  private final StoreRepository storeRepository;
   @Autowired
-  StoreLocationRepo storeLocationRepo;
+  private final StoreLocationRepository storeLocationRepository;
   @Autowired
-  StoreImageRepository storeImageRepository;
+  private final StoreImageRepository storeImageRepository;
   @Autowired
-  UserRepo userRepo;
+  private final UserRepository userRepository;
   @Autowired
-  _UserService userService;
+  private final _UserService userService;
 
   public void addStoreToUser(String email, String slug) {
     log.info("Adding store {} to user {}", slug, email);
-    User user = userRepo.findByEmail(email);
+    User user = userRepository.findByEmail(email);
     Store store = storeRepository.findBySlug(slug).orElse(null);
     user.getStores().add(store);
-    userRepo.save(user);
+    userRepository.save(user);
   }
 
   public _StatusCodeDto request(NewStoreCreationForm form) {
@@ -50,6 +53,13 @@ public class StoreCreateService {
     if (storeRepository.findBySlug(form.getSlug()).orElse(null) != null) {
       return new _StatusCodeDto(1302, "slug 중복됨");
     }
+
+    StoreLocation storeLocation = StoreLocation.builder()
+        .address(form.getAddress())
+        .latitude(form.getCoordinate().getLatitude())
+        .longitude(form.getCoordinate().getLongitude())
+        .build();
+    storeLocationRepository.save(storeLocation);
 
     Store store = Store.builder()
         .name(form.getName())
@@ -62,20 +72,14 @@ public class StoreCreateService {
         .previewImage(form.getPreview_image())
         .isChecked(false)
         .isApproved(false)
+        .storeLocation(storeLocation)
         .build();
     storeRepository.save(store);
 
-    StoreLocation storeLocation = StoreLocation.builder()
-        .address(form.getAddress())
-        .latitude(form.getCoordinate().getLatitude())
-        .longitude(form.getCoordinate().getLongitude())
-        .store(store)
-        .build();
-    storeLocationRepo.save(storeLocation);
-
     Collection<String> images = form.getStore_image();
     images.forEach(
-        image -> storeImageRepository.save(StoreImage.builder().imageUrl(image).store(store).build()));
+        image -> storeImageRepository.save(
+            StoreImage.builder().imageUrl(image).store(store).build()));
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     addStoreToUser(authentication.getPrincipal().toString(), form.getSlug());
@@ -93,6 +97,10 @@ public class StoreCreateService {
           return new _StatusCodeDto(2502, "slug 중복됨");
         }
       }
+      StoreLocation storeLocation = storeLocationRepository.findByStore(store);
+      storeLocation.setAddress(form.getAddress());
+      storeLocation.setLatitude(form.getCoordinate().getLatitude());
+      storeLocation.setLongitude(form.getCoordinate().getLongitude());
 
       store.setName(form.getName());
       store.setTel(form.getTel());
@@ -102,16 +110,13 @@ public class StoreCreateService {
       store.setWayTo(form.getWayto());
       store.setDescription(form.getDescription());
       store.setPreviewImage(form.getPreview_image());
+      store.setStoreLocation(storeLocation);
       storeRepository.save(store);
 
-      StoreLocation storeLocation = storeLocationRepo.findByStore(store);
-      storeLocation.setAddress(form.getAddress());
-      storeLocation.setLatitude(form.getCoordinate().getLatitude());
-      storeLocation.setLongitude(form.getCoordinate().getLongitude());
-      storeLocationRepo.save(storeLocation);
+      //storeLocationRepository.save(storeLocation);
 
       Collection<StoreImage> storeImages = storeImageRepository.findByStore(store);
-      storeImages.forEach(storeImage -> storeImageRepository.delete(storeImage));
+      storeImageRepository.deleteAll(storeImages);
 
       Collection<String> imageStrings = form.getStore_image();
       imageStrings.forEach(imageString -> storeImageRepository.save(
@@ -130,11 +135,10 @@ public class StoreCreateService {
 
     if (!user.getStores().isEmpty()) {
       Store userStore = user.getStores().iterator().next();
-      if(Objects.equals(slug, userStore.getSlug())) {
+      if (Objects.equals(slug, userStore.getSlug())) {
         return new _StatusCodeDto(1400, "사용 가능한 slug");
       }
     }
-
 
     if (storeRepository.findBySlug(slug).orElse(null) != null) {
       return new _StatusCodeDto(1401, "중복된 slug");
@@ -168,5 +172,11 @@ public class StoreCreateService {
       Store userStore = user.getStores().iterator().next();
       return new StoreCreate.getSlugDto(2600, "세차장 등록함", userStore.getSlug());
     }
+  }
+
+  public StoreAllInfoDto getStoreInfo(String slug) {
+    // TODO: 해당 slug의 store을 찾을 수 없으면 Custom Exception을 던져야 함.
+    Store store = storeRepository.findBySlug(slug).orElse(null);
+    return StoreAllInfoDto.from(store);
   }
 }

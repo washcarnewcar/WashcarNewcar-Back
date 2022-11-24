@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.washcar.wcnc.entity.Role;
 import me.washcar.wcnc.entity.User;
 import me.washcar.wcnc.repository.RoleRepo;
-import me.washcar.wcnc.repository.UserRepo;
+import me.washcar.wcnc.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,14 +23,14 @@ import java.util.List;
 @Transactional
 @Slf4j
 public class _UserServiceImpl implements _UserService, UserDetailsService {
-    private final UserRepo userRepo;
+    private final UserRepository userRepository;
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
 
 
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        User user = userRepo.findByEmail(userEmail);
+        User user = userRepository.findByEmail(userEmail);
 
         if(user == null){
             log.error("User not found in the DB");
@@ -51,7 +51,7 @@ public class _UserServiceImpl implements _UserService, UserDetailsService {
     public User saveUser(User user) {
         log.info("Saving new user {} into DB", user.getEmail());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+        return userRepository.save(user);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class _UserServiceImpl implements _UserService, UserDetailsService {
     @Override
     public void addRoleToUser(String email, String roleName) {
         log.info("Adding role {} to user {}", roleName, email);
-        User user = userRepo.findByEmail(email);
+        User user = userRepository.findByEmail(email);
         Role role = roleRepo.findByName(roleName);
         user.getRoles().add(role);
     }
@@ -71,13 +71,13 @@ public class _UserServiceImpl implements _UserService, UserDetailsService {
     @Override
     public User getUser(String email) {
         log.info("Fetching user {}", email);
-        return userRepo.findByEmail(email);
+        return userRepository.findByEmail(email);
     }
 
     @Override
     public List<User> getUsers() {
         log.info("Fetching users");
-        return userRepo.findAll();
+        return userRepository.findAll();
     }
 
 }
