@@ -11,7 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import lombok.Setter;
-import me.washcar.wcnc.dto.provider.StoreMenuDto.MenuDto;
+import me.washcar.wcnc.dto.provider.StoreMenuDto.MenuRequestDto;
+import me.washcar.wcnc.dto.provider.StoreMenuDto.MenuResponseDto;
 
 @Entity
 @Getter
@@ -33,16 +34,18 @@ public class StoreMenu {
   @NotNull
   private int price;
   @NotNull
-  private String expected_time;
-
+  private Long expected_hour;
+  @NotNull
+  private Long expected_minute;
   @ManyToOne
   private Store store;
 
-  public void updateStoreMenu(MenuDto menuDto) {
-    this.setImage(menuDto.getImage());
-    this.setName(menuDto.getName());
-    this.setDescription(menuDto.getDescription());
-    this.setExpected_time(menuDto.getExpected_time());
-    this.setPrice(menuDto.getPrice());
+  public void updateStoreMenu(MenuRequestDto menuRequestDto) {
+    this.setImage(menuRequestDto.getImage());
+    this.setName(menuRequestDto.getName());
+    this.setDescription(menuRequestDto.getDescription());
+    this.setExpected_hour(menuRequestDto.getExpected_hour());
+    this.setExpected_minute(menuRequestDto.getExpected_minute());
+    this.setPrice(menuRequestDto.getPrice());
   }
 }

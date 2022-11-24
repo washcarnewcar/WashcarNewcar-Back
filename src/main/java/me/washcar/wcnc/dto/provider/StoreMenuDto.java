@@ -3,6 +3,7 @@ package me.washcar.wcnc.dto.provider;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
+import me.washcar.wcnc.entity.StoreMenu;
 import org.springframework.lang.Nullable;
 
 public class StoreMenuDto {
@@ -17,7 +18,40 @@ public class StoreMenuDto {
 
 
   @Getter
-  public static class MenuDto {
+  @Builder
+  public static class MenuResponseDto {
+
+    @NotNull
+    private Long number;
+    @NotNull
+    private String image;
+    @NotNull
+    private String name;
+    @NotNull
+    private String description;
+    @NotNull
+    private int price;
+    @NotNull
+    private Long expected_hour;
+    @NotNull
+    private Long expected_minute;
+
+    public static MenuResponseDto from(StoreMenu storeMenu) {
+      return MenuResponseDto.builder()
+          .number(storeMenu.getStoreMenuId())
+          .image(storeMenu.getImage())
+          .name(storeMenu.getName())
+          .description(storeMenu.getDescription())
+          .price(storeMenu.getPrice())
+          .expected_hour(storeMenu.getExpected_hour())
+          .expected_minute(storeMenu.getExpected_minute())
+          .build();
+    }
+  }
+
+  @Getter
+  @Builder
+  public static class MenuRequestDto {
 
     @NotNull
     private String image;
@@ -26,9 +60,22 @@ public class StoreMenuDto {
     @NotNull
     private String description;
     @NotNull
-    private String expected_time;
-    @NotNull
     private int price;
+    @NotNull
+    private Long expected_hour;
+    @NotNull
+    private Long expected_minute;
+
+    public static MenuRequestDto from(StoreMenu storeMenu) {
+      return MenuRequestDto.builder()
+          .image(storeMenu.getImage())
+          .name(storeMenu.getName())
+          .description(storeMenu.getDescription())
+          .price(storeMenu.getPrice())
+          .expected_hour(storeMenu.getExpected_hour())
+          .expected_minute(storeMenu.getExpected_minute())
+          .build();
+    }
   }
 
   @Getter

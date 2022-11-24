@@ -31,7 +31,7 @@ public class StoreInfoController {
 
   @GetMapping("/store/{slug}/menu")
   public MenuListResult<StoreMenuDto> storeMenu(@PathVariable String slug) {
-    return MenuListResult.getMenuListResult(storeInfoService.getStoreMenu(slug));
+    return MenuListResult.getMenuListResult(storeInfoService.getStoreMenuList(slug));
   }
 
   @GetMapping("/store/{slug}/detail")

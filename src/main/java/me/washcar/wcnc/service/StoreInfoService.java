@@ -40,14 +40,14 @@ public class StoreInfoService {
   }
 
   // 세차장 메뉴 조회
-  public List<StoreMenuDto> getStoreMenu(String slug) {
+  public List<StoreMenuDto> getStoreMenuList(String slug) {
     // TODO: 해당 slug의 store을 찾을 수 없으면 Custom Exception을 던져야 함.
     Store store = storeRepository.findBySlug(slug).orElse(null);
     List<StoreMenu> storeMenus = store.getStoreMenus();
     return storeMenus.stream().map(StoreMenuDto::from).collect(Collectors.toList());
   }
 
-  //TODO 세차장세부정보-서비스
+  //  세차장세부정보-서비스
   public StoreDetailDto getStoreDetail(String slug) {
     // TODO: 해당 slug의 store을 찾을 수 없으면 Custom Exception을 던져야 함.
     Store store = storeRepository.findBySlug(slug).orElse(null);
