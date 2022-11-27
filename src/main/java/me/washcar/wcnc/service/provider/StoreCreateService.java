@@ -9,6 +9,8 @@ import me.washcar.wcnc.entity.Store;
 import me.washcar.wcnc.entity.StoreImage;
 import me.washcar.wcnc.entity.StoreLocation;
 import me.washcar.wcnc.entity.User;
+import me.washcar.wcnc.exception.CustomException;
+import me.washcar.wcnc.exception.ErrorCode;
 import me.washcar.wcnc.form.NewStoreCreationForm;
 import me.washcar.wcnc.repository.StoreImageRepository;
 import me.washcar.wcnc.repository.StoreLocationRepository;
@@ -50,7 +52,7 @@ public class StoreCreateService {
 
   public _StatusCodeDto request(NewStoreCreationForm form) {
 
-    if (storeRepository.findBySlug(form.getSlug()).orElse(null) != null) {
+    if (storeRepository.findBySlug(form.getSlug()).orElse(null) != null) {   //TODO: 구문 단순화 필요
       return new _StatusCodeDto(1302, "slug 중복됨");
     }
 
@@ -89,43 +91,42 @@ public class StoreCreateService {
 
   public _StatusCodeDto update(NewStoreCreationForm form, String slug) {
 
-    Store store = storeRepository.findBySlug(slug).orElse(null);
-    if (store != null) {
+    Store store = storeRepository.findBySlug(slug).orElseThrow(
+      ()-> new CustomException(ErrorCode.STORE_NOT_FOUND)
+    );
 
-      if (!Objects.equals(slug, form.getSlug())) {
-        if (storeRepository.findBySlug(form.getSlug()).orElse(null) != null) {
-          return new _StatusCodeDto(2502, "slug 중복됨");
-        }
+    if (!Objects.equals(slug, form.getSlug())) {
+      if (storeRepository.findBySlug(form.getSlug()).orElse(null) != null) {
+        return new _StatusCodeDto(2502, "slug 중복됨");
       }
-      StoreLocation storeLocation = storeLocationRepository.findByStore(store);
-      storeLocation.setAddress(form.getAddress());
-      storeLocation.setLatitude(form.getCoordinate().getLatitude());
-      storeLocation.setLongitude(form.getCoordinate().getLongitude());
-
-      store.setName(form.getName());
-      store.setTel(form.getTel());
-      store.setAddress(form.getAddress());
-      store.setAddressDetail(form.getAddress_detail());
-      store.setSlug(form.getSlug());
-      store.setWayTo(form.getWayto());
-      store.setDescription(form.getDescription());
-      store.setPreviewImage(form.getPreview_image());
-      store.setStoreLocation(storeLocation);
-      storeRepository.save(store);
-
-      //storeLocationRepository.save(storeLocation);
-
-      Collection<StoreImage> storeImages = storeImageRepository.findByStore(store);
-      storeImageRepository.deleteAll(storeImages);
-
-      Collection<String> imageStrings = form.getStore_image();
-      imageStrings.forEach(imageString -> storeImageRepository.save(
-          StoreImage.builder().imageUrl(imageString).store(store).build()));
-
-      return new _StatusCodeDto(2500, "세차장 정보 수정 완료");
-    } else {
-      return new _StatusCodeDto(-1, "세차장이 존재하지 않음");
     }
+
+    StoreLocation storeLocation = store.getStoreLocation();
+    storeLocation.setAddress(form.getAddress());
+    storeLocation.setLatitude(form.getCoordinate().getLatitude());
+    storeLocation.setLongitude(form.getCoordinate().getLongitude());
+
+    store.setName(form.getName());
+    store.setTel(form.getTel());
+    store.setAddress(form.getAddress());
+    store.setAddressDetail(form.getAddress_detail());
+    store.setSlug(form.getSlug());
+    store.setWayTo(form.getWayto());
+    store.setDescription(form.getDescription());
+    store.setPreviewImage(form.getPreview_image());
+    store.setStoreLocation(storeLocation);
+    storeRepository.save(store);
+
+    Collection<StoreImage> storeImages = store.getStoreImages();
+    storeImageRepository.deleteAll(storeImages);
+
+    Collection<String> imageStrings = form.getStore_image();
+    imageStrings.forEach(imageString -> storeImageRepository.save(
+        StoreImage.builder().imageUrl(imageString).store(store).build())
+    );
+
+    return new _StatusCodeDto(2500, "세차장 정보 수정 완료");
+
   }
 
   public _StatusCodeDto slugCheck(String slug) {
@@ -148,10 +149,9 @@ public class StoreCreateService {
   }
 
   public StoreCreate.isApprovedDto isApproved(String slug) {
-    Store store = storeRepository.findBySlug(slug).orElse(null);
-    if (store == null) {
-      return new StoreCreate.isApprovedDto(-1, "error", "세차장이 존재하지 않음");
-    }
+    Store store = storeRepository.findBySlug(slug).orElseThrow(
+      ()-> new CustomException(ErrorCode.STORE_NOT_FOUND)
+    );
     if (!store.getIsChecked()) {
       return new StoreCreate.isApprovedDto(1501, "세차장 승인 대기중", "");
     }
@@ -175,8 +175,9 @@ public class StoreCreateService {
   }
 
   public StoreAllInfoDto getStoreInfo(String slug) {
-    // TODO: 해당 slug의 store을 찾을 수 없으면 Custom Exception을 던져야 함.
-    Store store = storeRepository.findBySlug(slug).orElse(null);
+    Store store = storeRepository.findBySlug(slug).orElseThrow(
+            ()-> new CustomException(ErrorCode.STORE_NOT_FOUND)
+    );
     return StoreAllInfoDto.from(store);
   }
 }
