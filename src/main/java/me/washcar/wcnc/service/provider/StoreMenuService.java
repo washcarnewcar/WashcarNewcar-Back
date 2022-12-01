@@ -3,6 +3,7 @@ package me.washcar.wcnc.service.provider;
 import static java.util.stream.Collectors.toList;
 import static me.washcar.wcnc.dto.provider.StoreMenuDto.DeleteDto.getDeleteDto;
 import static me.washcar.wcnc.dto.provider.StoreMenuDto.UpdateDto.getUpdateDto;
+import static me.washcar.wcnc.exception.ErrorCode.STORE_MENU_NOT_FOUND;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import me.washcar.wcnc.dto.provider.StoreMenuDto.MenuResponseDto;
 import me.washcar.wcnc.dto.provider.StoreMenuDto.UpdateDto;
 import me.washcar.wcnc.entity.Store;
 import me.washcar.wcnc.entity.StoreMenu;
+import me.washcar.wcnc.exception.CustomException;
+import me.washcar.wcnc.exception.ErrorCode;
 import me.washcar.wcnc.repository.StoreMenuRepository;
 import me.washcar.wcnc.repository.StoreRepository;
 import org.springframework.stereotype.Service;
@@ -25,8 +28,8 @@ public class StoreMenuService {
   private final StoreMenuRepository storeMenuRepository;
 
   public Long createStoreMenu(String slug, MenuRequestDto menuRequestDto) {
-    // TODO: 해당 slug의 store을 찾을 수 없으면 Custom Exception을 던져야 함.
-    Store store = storeRepository.findBySlug(slug).orElse(null);
+    Store store = storeRepository.findBySlug(slug)
+        .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
     return storeMenuRepository.save(generateStoreMenu(store, menuRequestDto)).getStoreMenuId();
   }
 
@@ -43,8 +46,8 @@ public class StoreMenuService {
   }
 
   public UpdateDto updateStoreMenu(Long menuId, MenuRequestDto menuRequestDto) {
-    // TODO: 해당 id의 storeOption을 찾을 수 없으면 Custom Exception을 던져야 함.
-    StoreMenu storeMenu = storeMenuRepository.findById(menuId).orElse(null);
+    StoreMenu storeMenu = storeMenuRepository.findById(menuId)
+        .orElseThrow(() -> new CustomException(STORE_MENU_NOT_FOUND));
     storeMenu.updateStoreMenu(menuRequestDto);
     storeMenuRepository.save(storeMenu);
     return getUpdateDto();
@@ -57,15 +60,15 @@ public class StoreMenuService {
   }
 
   public List<MenuResponseDto> getMenuList(String slug) {
-    // TODO: 해당 slug의 store을 찾을 수 없으면 Custom Exception을 던져야 함.
-    Store store = storeRepository.findBySlug(slug).orElse(null);
+    Store store = storeRepository.findBySlug(slug)
+        .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
     List<StoreMenu> storeMenus = store.getStoreMenus();
     return storeMenus.stream().map(MenuResponseDto::from).collect(toList());
   }
 
   public MenuResponseDto getMenu(Long menuId) {
-    // TODO: 해당 id의 storeOption을 찾을 수 없으면 Custom Exception을 던져야 함.
-    StoreMenu storeMenu = storeMenuRepository.findById(menuId).orElse(null);
+    StoreMenu storeMenu = storeMenuRepository.findById(menuId)
+        .orElseThrow(() -> new CustomException(STORE_MENU_NOT_FOUND));
     return MenuResponseDto.from(storeMenu);
   }
 }
