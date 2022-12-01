@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import me.washcar.wcnc.form.NewStoreCreationForm;
 
 @Entity
 @Data
@@ -69,4 +70,16 @@ public class Store {
 
   @OneToOne
   private StoreLocation storeLocation;
+
+  public void setStore(NewStoreCreationForm form, StoreLocation storeLocation) {
+    this.name = form.getName();
+    this.tel = form.getTel();
+    this.address = form.getAddress();
+    this.addressDetail = form.getAddress_detail();
+    this.slug = form.getSlug();
+    this.wayTo = form.getWayto();
+    this.description = form.getDescription();
+    this.previewImage = form.getPreview_image();
+    this.storeLocation = storeLocation;
+  }
 }

@@ -15,8 +15,8 @@ public class StoreCreateController {
   private final StoreCreateService storeCreateService;
 
   @PostMapping("/provider/new")
-  public _StatusCodeDto request(@RequestBody NewStoreCreationForm form) {
-    return storeCreateService.request(form);
+  public _StatusCodeDto create(@RequestBody NewStoreCreationForm form) {
+    return storeCreateService.create(form);
   }
 
   @PostMapping("/provider/{slug}/store")
