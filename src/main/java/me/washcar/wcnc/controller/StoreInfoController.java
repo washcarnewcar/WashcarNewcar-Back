@@ -6,6 +6,7 @@ import me.washcar.wcnc.dto.StoreInfo.MenuListResult;
 import me.washcar.wcnc.dto.StoreInfo.StoreInfoDto;
 import me.washcar.wcnc.dto.StoreInfo.StoreMenuDto;
 import me.washcar.wcnc.dto.StoreInfo.StoreDetailDto;
+import me.washcar.wcnc.dto.provider.StoreCreate.StoreAllInfoDto;
 import me.washcar.wcnc.service.StoreInfoService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,7 @@ public class StoreInfoController {
   }
 
   @GetMapping("/store/{slug}/info")
-  public StoreInfoDto getStoreInfo(@PathVariable String slug) {
+  public StoreAllInfoDto getStoreInfo(@PathVariable String slug) {
     return storeInfoService.getStoreInfo(slug);
   }
 

@@ -8,6 +8,7 @@ import me.washcar.wcnc.dto.StoreInfo;
 import me.washcar.wcnc.dto.StoreInfo.StoreInfoDto;
 import me.washcar.wcnc.dto.StoreInfo.StoreMenuDto;
 import me.washcar.wcnc.dto.StoreInfo.StoreDetailDto;
+import me.washcar.wcnc.dto.provider.StoreCreate.StoreAllInfoDto;
 import me.washcar.wcnc.entity.Store;
 import me.washcar.wcnc.entity.StoreImage;
 import me.washcar.wcnc.entity.StoreMenu;
@@ -24,25 +25,22 @@ public class StoreInfoService {
 
   private final StoreRepository storeRepository;
 
-  private final StoreImageRepository storeImageRepository;
-
   //TODO 세차장리스트조회-서비스
   public StoreInfo.searchStoreByLocationDto searchStoreByLocation(float longitude, float latitude) {
     return new StoreInfo.searchStoreByLocationDto();
   }
 
   // 세차장 정보
-  public StoreInfoDto getStoreInfo(String slug) {
+  public StoreAllInfoDto getStoreInfo(String slug) {
+    // TODO : 승인되지 않은 세차장에 대해서는 조회되지 않도록 처리
     Store store = storeRepository.findBySlug(slug)
         .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
-    // TODO: Store 에 등록된 StoreImage 이미지가 없다면, 빈 객체를 반환해야함.
-    List<StoreImage> storeImages = storeImageRepository.findByStore_StoreId(store.getStoreId())
-        .orElse(null);
-    return StoreInfoDto.from(store, storeImages);
+    return StoreAllInfoDto.from(store);
   }
 
   // 세차장 메뉴 조회
   public List<StoreMenuDto> getStoreMenuList(String slug) {
+    // TODO : 승인되지 않은 세차장에 대해서는 조회되지 않도록 처리
     Store store = storeRepository.findBySlug(slug)
         .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
     List<StoreMenu> storeMenus = store.getStoreMenus();
