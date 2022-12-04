@@ -1,5 +1,6 @@
 package me.washcar.wcnc.entity;
 
+import java.util.Objects;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,7 +9,8 @@ import java.util.List;
 import me.washcar.wcnc.form.NewStoreCreationForm;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor

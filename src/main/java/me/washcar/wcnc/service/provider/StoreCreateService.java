@@ -7,6 +7,7 @@ import static me.washcar.wcnc.exception.ErrorCode.STORE_NOT_FOUND;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.washcar.wcnc.dto._StatusCodeDto;
@@ -37,17 +38,17 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class StoreCreateService {
 
-  @Autowired
   private final StoreRepository storeRepository;
-  @Autowired
+
   private final StoreLocationRepository storeLocationRepository;
-  @Autowired
+
   private final StoreImageRepository storeImageRepository;
-  @Autowired
+
   private final UserRepository userRepository;
-  @Autowired
+
   private final _UserService userService;
 
+  @Transactional
   public _StatusCodeDto create(NewStoreCreationForm form) {
     if (storeRepository.findBySlug(form.getSlug()).orElse(null) != null) {
       return new _StatusCodeDto(1302, "slug 중복됨");
@@ -64,16 +65,14 @@ public class StoreCreateService {
     }
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
     addStoreToUser(authentication.getPrincipal().toString(), form.getSlug());
 
     return new _StatusCodeDto(1300, "매장 승인 요청 성공");
   }
 
   public void addStoreToUser(String email, String slug) {
-    //log.info("Adding store {} to user {}", slug, email);
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    User user = userService.getUser(authentication.getPrincipal().toString());
-    //User user = userRepository.findByEmail(email);
+    User user = userRepository.findByEmail(email);
     Store store = storeRepository.findBySlug(slug)
         .orElseThrow(() -> new CustomException(STORE_NOT_FOUND));
     user.getStores().add(store);
@@ -115,7 +114,7 @@ public class StoreCreateService {
     if (storeRepository.findBySlug(slug).orElse(null) != null) {
       if (!user.getStores().isEmpty()) {
         Set<Store> userStore = user.getStores();
-        for (Store store1 : userStore){
+        for (Store store1 : userStore) {
           if (!Objects.equals(slug, store1.getSlug())) {
             return new _StatusCodeDto(2502, "slug 중복됨");
           }
@@ -131,7 +130,8 @@ public class StoreCreateService {
     store.setStore(form, storeLocation);
     storeRepository.save(store);
 
-    List<StoreImage> storeImages = storeImageRepository.findByStore_StoreId(store.getStoreId()).orElseThrow(() -> new CustomException(STORE_IMAGE_NOT_FOUND));
+    List<StoreImage> storeImages = storeImageRepository.findByStore_StoreId(store.getStoreId())
+        .orElseThrow(() -> new CustomException(STORE_IMAGE_NOT_FOUND));
     storeImageRepository.deleteAll(storeImages);
 
     List<String> imageUrls = form.getStore_image().stream().toList();
