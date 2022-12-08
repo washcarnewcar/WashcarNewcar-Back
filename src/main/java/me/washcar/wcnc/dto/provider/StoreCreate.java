@@ -36,7 +36,7 @@ public class StoreCreate {
 
     private String name;
     private String tel;
-    private CoordinateDto coordinatedto;
+    private CoordinateDto coordinate;
     private String address;
     private String address_detail;
     private String slug;
@@ -49,7 +49,7 @@ public class StoreCreate {
       return StoreAllInfoDto.builder()
           .name(store.getName())
           .tel(store.getTel())
-          .coordinatedto(CoordinateDto.from(store.getStoreLocation()))
+          .coordinate(CoordinateDto.from(store.getStoreLocation()))
           .address(store.getAddress())
           .address_detail(store.getAddressDetail())
           .slug(store.getSlug())
