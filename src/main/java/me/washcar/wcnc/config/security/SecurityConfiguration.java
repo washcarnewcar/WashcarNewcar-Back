@@ -3,6 +3,7 @@ package me.washcar.wcnc.config.security;
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.filter.CustomAuthenticationFilter;
 import me.washcar.wcnc.filter.CustomAuthorizationFilter;
+import me.washcar.wcnc.service.OAuth.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private final CustomOAuth2UserService customOAuth2UserService;
     private final UserDetailsService userDetailsService;
     private final AuthenticationEntryPointImpl authenticationEntryPoint;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -37,6 +40,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable();
         http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.oauth2Login()
+            .userInfoEndpoint()
+            .userService(customOAuth2UserService);
+
         http.authorizeRequests().antMatchers("/login", "/refresh/token", "/status/**").permitAll();
         http.authorizeRequests().antMatchers("/super/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
         http.authorizeRequests().antMatchers("/provider/check-slug/*").permitAll();

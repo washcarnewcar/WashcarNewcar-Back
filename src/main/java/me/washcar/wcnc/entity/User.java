@@ -1,19 +1,12 @@
 package me.washcar.wcnc.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.util.Objects;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -21,6 +14,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
+  @Builder
+  public User(String email, String password) {
+    this.email = email;
+    this.password = password;
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
