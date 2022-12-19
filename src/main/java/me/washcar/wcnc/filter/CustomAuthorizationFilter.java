@@ -3,6 +3,7 @@ package me.washcar.wcnc.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +58,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
                     filterChain.doFilter(request, response);
 
-                } catch (Exception exception) {
+                } catch (JWTVerificationException exception) {
                     log.error("Error logging in: {}", exception.getMessage());
                     response.setHeader("error", exception.getMessage());
                     response.setStatus(UNAUTHORIZED.value());

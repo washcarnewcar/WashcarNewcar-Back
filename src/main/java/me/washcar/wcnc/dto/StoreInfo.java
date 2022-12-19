@@ -45,14 +45,14 @@ public class StoreInfo {
     private Long number;
     private String image;
     private String name;
-    private String detail;
+    private String description;
     private int price;
 
     public static StoreMenuDto from(StoreMenu storeMenu) {
       return StoreMenuDto.builder().number(storeMenu.getStoreMenuId())
           .image(storeMenu.getImage())
           .name(storeMenu.getName())
-          .detail(storeMenu.getDescription())
+          .description(storeMenu.getDescription())
           .price(storeMenu.getPrice())
           .build();
     }
