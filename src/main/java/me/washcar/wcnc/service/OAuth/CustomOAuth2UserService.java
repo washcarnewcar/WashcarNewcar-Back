@@ -1,11 +1,11 @@
 package me.washcar.wcnc.service.OAuth;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.washcar.wcnc.entity.Role;
 import me.washcar.wcnc.entity.User;
 import me.washcar.wcnc.repository.RoleRepo;
 import me.washcar.wcnc.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -21,16 +21,14 @@ import java.util.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    @Autowired
-    UserRepository userRepository;
+    final UserRepository userRepository;
 
-    @Autowired
-    HttpSession httpSession;
+    final HttpSession httpSession;
 
-    @Autowired
-    RoleRepo roleRepo;
+    final RoleRepo roleRepo;
 
     @Override
     @Transactional
@@ -54,8 +52,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             throw new OAuth2AuthenticationException("허용되지 않은 OAuth 인증");
         }
 
-        User user;
-        user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
 
         if(user == null){
             user = new User(null, null, null, null,
