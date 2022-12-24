@@ -23,6 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final UserDetailsService userDetailsService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final AuthenticationEntryPointImpl authenticationEntryPoint;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -42,6 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.oauth2Login()
+            .successHandler(oAuth2AuthenticationSuccessHandler)
             .userInfoEndpoint()
             .userService(customOAuth2UserService);
 
