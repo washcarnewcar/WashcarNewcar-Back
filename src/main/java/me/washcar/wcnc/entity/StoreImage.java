@@ -21,7 +21,7 @@ public class StoreImage {
 
     @Id
     @GeneratedValue
-    private Long storeImageId;
+    private Long id;
 
     private String imageUrl;
 

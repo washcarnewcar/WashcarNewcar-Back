@@ -10,7 +10,7 @@ public class Model {
 
   @Id
   @GeneratedValue
-  private Long modelId;
+  private Long id;
 
   @Column(length = 127)
   private String name;

@@ -11,5 +11,5 @@ import java.util.Collection;
 public interface StoreImageRepository extends JpaRepository<StoreImage, Long> {
     Optional<Collection<StoreImage>> findByStore(Store store);
 
-    Optional<List<StoreImage>> findByStore_StoreId(Long storeId);
+    Optional<List<StoreImage>> findByStore_Id(Long storeId);
 }

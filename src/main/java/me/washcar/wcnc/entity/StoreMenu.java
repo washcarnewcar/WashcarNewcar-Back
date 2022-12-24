@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import lombok.Setter;
 import me.washcar.wcnc.dto.provider.StoreMenuDto.MenuRequestDto;
-import me.washcar.wcnc.dto.provider.StoreMenuDto.MenuResponseDto;
 
 @Entity
 @Getter
@@ -24,7 +23,7 @@ public class StoreMenu {
 
   @Id
   @GeneratedValue
-  private Long storeMenuId;
+  private Long id;
   @NotNull
   private String image;
   @NotNull

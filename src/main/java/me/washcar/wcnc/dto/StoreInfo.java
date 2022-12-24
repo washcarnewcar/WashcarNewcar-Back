@@ -49,7 +49,7 @@ public class StoreInfo {
     private int price;
 
     public static StoreMenuDto from(StoreMenu storeMenu) {
-      return StoreMenuDto.builder().number(storeMenu.getStoreMenuId())
+      return StoreMenuDto.builder().number(storeMenu.getId())
           .image(storeMenu.getImage())
           .name(storeMenu.getName())
           .description(storeMenu.getDescription())

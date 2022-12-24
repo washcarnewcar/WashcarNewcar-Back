@@ -21,7 +21,7 @@ public class VehicleDataDto {
     private String name;
 
     public static BrandDto from(Brand brand) {
-      return BrandDto.builder().number(brand.getBrandId()).name(brand.getName())
+      return BrandDto.builder().number(brand.getId()).name(brand.getName())
           .build();
     }
 
@@ -50,7 +50,7 @@ public class VehicleDataDto {
     private String name;
 
     public static ModelDto from(Model model) {
-      return ModelDto.builder().number(model.getModelId()).name(model.getName())
+      return ModelDto.builder().number(model.getId()).name(model.getName())
           .build();
     }
   }

@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.time.ZonedDateTime;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -21,7 +20,7 @@ public class StoreReservationException {
 
   @Id
   @GeneratedValue
-  private Long reservationExceptionId;
+  private Long id;
 
   private boolean allDay;
 

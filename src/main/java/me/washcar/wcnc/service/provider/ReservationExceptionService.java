@@ -1,6 +1,5 @@
 package me.washcar.wcnc.service.provider;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +49,8 @@ public class ReservationExceptionService {
   public ReservationExceptionResponseDto getReservationException(String slug) {
     Store store = storeRepository.findBySlug(slug)
         .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
-    List<StoreReservationException> storeReservationExceptions = reservationExceptionRepository.findAllByStore_StoreId(
-        store.getStoreId());
+    List<StoreReservationException> storeReservationExceptions = reservationExceptionRepository.findAllByStore_Id(
+        store.getId());
     List<ReservationExceptionDto> reservationExceptionDtoStream = storeReservationExceptions.stream()
         .map(ReservationExceptionDto::from).collect(Collectors.toList());
     return ReservationExceptionResponseDto.from(reservationExceptionDtoStream);

@@ -5,7 +5,6 @@ import static me.washcar.wcnc.exception.ErrorCode.STORE_LOCATION_NOT_FOUND;
 import static me.washcar.wcnc.exception.ErrorCode.STORE_NOT_FOUND;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +23,10 @@ import me.washcar.wcnc.repository.StoreLocationRepository;
 import me.washcar.wcnc.repository.StoreRepository;
 import me.washcar.wcnc.repository.UserRepository;
 import me.washcar.wcnc.service._UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Objects;
 
 
@@ -129,7 +126,7 @@ public class StoreCreateService {
     store.setStore(form, storeLocation);
     storeRepository.save(store);
 
-    List<StoreImage> storeImages = storeImageRepository.findByStore_StoreId(store.getStoreId())
+    List<StoreImage> storeImages = storeImageRepository.findByStore_Id(store.getId())
         .orElseThrow(() -> new CustomException(STORE_IMAGE_NOT_FOUND));
     storeImageRepository.deleteAll(storeImages);
 

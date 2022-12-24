@@ -5,6 +5,5 @@ import me.washcar.wcnc.entity.Model;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ModelRepository extends JpaRepository<Model, Long> {
-
-  List<Model> findAllByBrand_BrandId(Long brandId);
+  List<Model> findAllByBrand_Id(Long brandId);
 }

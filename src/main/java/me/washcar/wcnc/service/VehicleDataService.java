@@ -28,7 +28,7 @@ public class VehicleDataService {
   }
 
   public List<ModelDto> modelList(Long brandId) {
-    List<Model> models = modelRepository.findAllByBrand_BrandId(brandId);
+    List<Model> models = modelRepository.findAllByBrand_Id(brandId);
     return models.stream().map(ModelDto::from).collect(toList());
   }
 }

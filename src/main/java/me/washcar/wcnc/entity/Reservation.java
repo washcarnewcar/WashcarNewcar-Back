@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 public class Reservation {
     @Id
     @GeneratedValue
-    private Long reservationId;
+    private Long id;
 
     private ZonedDateTime startDateTime;
 

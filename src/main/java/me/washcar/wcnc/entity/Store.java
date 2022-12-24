@@ -1,6 +1,5 @@
 package me.washcar.wcnc.entity;
 
-import java.util.Objects;
 import lombok.*;
 
 import javax.persistence.*;
@@ -35,7 +34,7 @@ public class Store {
 
   @Id
   @GeneratedValue
-  private Long storeId;
+  private Long id;
 
   @Column(nullable = false)
   private String name;

@@ -2,7 +2,6 @@ package me.washcar.wcnc.entity;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -23,7 +22,7 @@ public class StoreLocation {
 
   @Id
   @GeneratedValue
-  private Long storeLocationId;
+  private Long id;
 
   private String address;
 

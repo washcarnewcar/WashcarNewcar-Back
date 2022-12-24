@@ -30,7 +30,7 @@ public class StoreMenuService {
   public Long createStoreMenu(String slug, MenuRequestDto menuRequestDto) {
     Store store = storeRepository.findBySlug(slug)
         .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
-    return storeMenuRepository.save(generateStoreMenu(store, menuRequestDto)).getStoreMenuId();
+    return storeMenuRepository.save(generateStoreMenu(store, menuRequestDto)).getId();
   }
 
   private StoreMenu generateStoreMenu(Store store, MenuRequestDto menuRequestDto) {

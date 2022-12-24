@@ -38,7 +38,7 @@ public class StoreMenuDto {
 
     public static MenuResponseDto from(StoreMenu storeMenu) {
       return MenuResponseDto.builder()
-          .number(storeMenu.getStoreMenuId())
+          .number(storeMenu.getId())
           .image(storeMenu.getImage())
           .name(storeMenu.getName())
           .description(storeMenu.getDescription())
