@@ -12,7 +12,7 @@ public class ReservationController {
 
   private final ReservationService reservationService;
 
-  @GetMapping(value = "/store/{slug}/menu/{menuId}")
+  @GetMapping(value = "/store/menu/{menuId}")
   public MenuInfoDto getMenuInfo(@PathVariable String menuId) {
     return reservationService.menuInfo(menuId);
   }
