@@ -29,6 +29,10 @@ public class ReservationExceptionService {
       Store store = storeRepository.findBySlug(slug)
           .orElseThrow(() -> new CustomException(ErrorCode.STORE_NOT_FOUND));
       List<ReservationExceptionDto> except = requestDto.getExcept();
+      List<StoreReservationException> reservationExceptionList = reservationExceptionRepository.findAllByStore_Id(
+          store.getId());
+      reservationExceptionRepository.deleteAll(reservationExceptionList);
+
       for (ReservationExceptionDto reservationExceptionDto : except) {
         generateReservationException(reservationExceptionDto, store);
       }
