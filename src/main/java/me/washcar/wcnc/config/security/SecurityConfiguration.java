@@ -23,6 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final UserDetailsService userDetailsService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final AuthenticationEntryPointImpl authenticationEntryPoint;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -42,6 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.oauth2Login()
+            .successHandler(oAuth2AuthenticationSuccessHandler)
             .userInfoEndpoint()
             .userService(customOAuth2UserService);
 
@@ -50,7 +52,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/login", "/refresh/token", "/status/**").permitAll();
         http.authorizeRequests().antMatchers("/super/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
         http.authorizeRequests().antMatchers("/provider/check-slug/*").permitAll();
-        http.authorizeRequests().antMatchers("/provider/**").hasAnyAuthority("ROLE_MANAGER");
+        http.authorizeRequests().antMatchers("/provider/**").hasAnyAuthority("ROLE_USER");
+        //http.authorizeRequests().antMatchers("/provider/**").hasAnyAuthority("ROLE_MANAGER");
         http.authorizeRequests().antMatchers("/user").authenticated();
         http.authorizeRequests().anyRequest().permitAll();
 
