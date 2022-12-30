@@ -16,10 +16,7 @@ import me.washcar.wcnc.form.SignUpForm;
 import me.washcar.wcnc.service.AuthorizationService;
 import me.washcar.wcnc.service._UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.Cookie;
@@ -72,9 +69,11 @@ public class AuthorizationController {
         // 쿠키 가져옴
         String refresh_token = null;
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("refresh_token")) {
-                refresh_token = cookie.getValue();
+        if (cookies != null){
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("refresh_token")) {
+                    refresh_token = cookie.getValue();
+                }
             }
         }
 
@@ -141,6 +140,19 @@ public class AuthorizationController {
         } else {
             throw new RuntimeException("Refresh token is missing");
         }
+    }
+
+    @GetMapping("/logout")
+    public void logout(HttpServletResponse response){
+        Cookie accessToken = new Cookie("access_token", null);
+        accessToken.setMaxAge(0);
+        accessToken.setPath("/");
+        response.addCookie(accessToken);
+
+        Cookie refreshToken = new Cookie("refresh_token", null);
+        refreshToken.setMaxAge(0);
+        refreshToken.setPath("/");
+        response.addCookie(refreshToken);
     }
 
     @PostMapping("/signup")

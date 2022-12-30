@@ -38,9 +38,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             // 쿠키 가져옴
             String token = null;
             Cookie[] cookies = request.getCookies();
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("access_token")) {
-                    token = cookie.getValue();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("access_token")) {
+                        token = cookie.getValue();
+                    }
                 }
             }
 
