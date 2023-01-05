@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo Build Starting on `date`
+      - mvn install
+  post_build:
+    commands:
+      - echo $(basename ./build/libs/*.jar)
+      - pwd
+
+artifacts:
+  files:
+    - build/libs/*.jar
+    - appspec.yml
+    - scripts/**
+  discard-paths: yes
