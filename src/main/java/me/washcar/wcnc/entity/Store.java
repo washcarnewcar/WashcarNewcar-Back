@@ -10,8 +10,8 @@ import me.washcar.wcnc.form.NewStoreCreationForm;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class Store {
 
@@ -71,6 +71,9 @@ public class Store {
 
   @OneToOne
   private StoreLocation storeLocation;
+
+  @OneToOne
+  private StoreOperateTime storeOperateTime;
 
   public void setStore(NewStoreCreationForm form, StoreLocation storeLocation) {
     this.name = form.getName();
