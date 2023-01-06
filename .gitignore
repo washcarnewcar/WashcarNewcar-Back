@@ -33,5 +33,8 @@ build/
 ### VS Code ###
 .vscode/
 
-### Security ###
-src/main/resources/application.yml
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
