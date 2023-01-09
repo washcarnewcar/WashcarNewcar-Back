@@ -36,6 +36,7 @@ public class ReservationExceptionService {
       for (ReservationExceptionDto reservationExceptionDto : except) {
         generateReservationException(reservationExceptionDto, store);
       }
+      store.setStoreReservationExceptions(reservationExceptionRepository.findAllByStore_Id(store.getId()));
     } catch (Exception e) {
       return ReservationExceptionMessage.from(2101, "예외 설정 중 오류 발생");
     }

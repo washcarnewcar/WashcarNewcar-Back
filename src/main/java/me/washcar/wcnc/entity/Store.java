@@ -60,12 +60,17 @@ public class Store {
   @Column(nullable = false)
   private Boolean isChecked;
 
+  // TODO: 리스트에 추가
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
   private List<StoreImage> storeImages = new ArrayList<>();
 
-  @OneToMany(mappedBy = "store")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
   private List<Reservation> reservations = new ArrayList<>();
 
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
+  private List<StoreReservationException> storeReservationExceptions = new ArrayList<>();
+
+  // TODO: 리스트에 추가
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "store")
   private List<StoreMenu> storeMenus = new ArrayList<>();
 
@@ -85,5 +90,9 @@ public class Store {
     this.description = form.getDescription();
     this.previewImage = form.getPreview_image();
     this.storeLocation = storeLocation;
+  }
+
+  public void addReservation(Reservation reservation) {
+    this.reservations.add(reservation);
   }
 }

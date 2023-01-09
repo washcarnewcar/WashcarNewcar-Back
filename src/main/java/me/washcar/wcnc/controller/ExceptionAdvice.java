@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class _CustomExceptionHandler {
+public class ExceptionAdvice {
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<ErrorResponseDto> handleException(CustomException e) {
         return ErrorResponseDto.toResponseEntity(e.getErrorCode());
