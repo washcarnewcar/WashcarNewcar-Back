@@ -1,19 +1,16 @@
 package me.washcar.wcnc;
 
-import me.washcar.wcnc.entity.Role;
-import me.washcar.wcnc.entity.User;
 import me.washcar.wcnc.service._UserService;
 import me.washcar.wcnc.service.provider.StoreCreateService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-
+@EnableJpaAuditing
 @SpringBootApplication
 public class WcncApplication {
 

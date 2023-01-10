@@ -9,10 +9,13 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.dto.Authorization;
+import me.washcar.wcnc.dto._StatusCodeDto;
 import me.washcar.wcnc.entity.Role;
 import me.washcar.wcnc.entity.User;
 import me.washcar.wcnc.form.RoleToUserForm;
-import me.washcar.wcnc.form.SignUpForm;
+import me.washcar.wcnc.form.SignupCheckEmailForm;
+import me.washcar.wcnc.form.SignupCheckNumberForm;
+import me.washcar.wcnc.form.SignupForm;
 import me.washcar.wcnc.service.AuthorizationService;
 import me.washcar.wcnc.service._UserService;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
@@ -155,9 +159,19 @@ public class AuthorizationController {
         response.addCookie(refreshToken);
     }
 
+    @PostMapping("/signup/check/email")
+    public _StatusCodeDto signupCheckEmail(@Valid @RequestBody SignupCheckEmailForm form){
+        return authorizationService.signupCheckEmail(form.getEmail());
+    }
+
+    @PostMapping("/signup/check/number")
+    public _StatusCodeDto signupCheckNumber(@Valid @RequestBody SignupCheckNumberForm form){
+        return authorizationService.signupCheckNumber(form.getEmail(), form.getNumber());
+    }
+
     @PostMapping("/signup")
-    public Authorization.signupDto signup(@RequestBody SignUpForm form) {
-        return authorizationService.signup(form.getId(), form.getPassword(), form.getMobile_carrier(), form.getPhone());
+    public _StatusCodeDto signup(@Valid @RequestBody SignupForm form) {
+        return authorizationService.signup(form.getEmail(), form.getNumber(), form.getPassword());
     }
 
     @GetMapping("/user")
