@@ -15,7 +15,6 @@ import me.washcar.wcnc.form.RoleToUserForm;
 import me.washcar.wcnc.form.SignUpForm;
 import me.washcar.wcnc.service.AuthorizationService;
 import me.washcar.wcnc.service._UserService;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -100,40 +99,22 @@ public class AuthorizationController {
                         .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(algorithm);
 
-                ResponseCookie accessToken = ResponseCookie.from("access_token", access_token)
-                        .secure(true)
-                        .httpOnly(true)
-                        .path("/")
-                        // .sameSite("None")
-                        .domain("washcar.me")
-                        .build();
-                response.addHeader("Set-Cookie", accessToken.toString());
-                // Cookie accessToken = new Cookie("access_token", access_token);
-                // accessToken.setSecure(true);
-                // accessToken.setHttpOnly(true);
-                // accessToken.setPath("/");
-                // response.addCookie(accessToken);
+                Cookie accessToken = new Cookie("access_token", access_token);
+                accessToken.setSecure(true);
+                accessToken.setHttpOnly(true);
+                accessToken.setPath("/");
+                accessToken.setDomain("washcar.me");
+                accessToken.setMaxAge(60 * 60 * 24 * 90);
+                response.addCookie(accessToken);
 
-                ResponseCookie refreshToken = ResponseCookie.from("refresh_token", refresh_token)
-                        .secure(true)
-                        .httpOnly(true)
-                        .path("/")
-                        // .sameSite("None")
-                        .domain("washcar.me")
-                        .build();
-                response.addHeader("Set-Cookie", refreshToken.toString());
-                // Cookie refreshToken = new Cookie("refresh_token", refresh_token);
-                // refreshToken.setSecure(true);
-                // refreshToken.setHttpOnly(true);
-                // refreshToken.setPath("/");
-                // response.addCookie(refreshToken);
+                Cookie refreshToken = new Cookie("refresh_token", refresh_token);
+                refreshToken.setSecure(true);
+                refreshToken.setHttpOnly(true);
+                refreshToken.setPath("/");
+                refreshToken.setDomain("washcar.me");
+                accessToken.setMaxAge(60 * 60 * 24 * 90);
+                response.addCookie(refreshToken);
 
-                // Map<String, String> tokens = new HashMap<>();
-                // tokens.put("access_token", access_token);
-                // tokens.put("refresh_token", refresh_token);
-                // response.setContentType(APPLICATION_JSON_VALUE);
-                // new ObjectMapper().writeValue(response.getOutputStream(), tokens);
-                // } catch (Exception exception) {
             } catch (JWTVerificationException exception) {
                 // TODO: 추후에 커스텀 예외로 전환
                 // refresh_token 검증 실패
