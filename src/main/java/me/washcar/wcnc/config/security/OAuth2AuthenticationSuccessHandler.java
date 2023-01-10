@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +39,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Matcher m = p.matcher(roleString);
 
         List<String> roleClaimList = new ArrayList<>();
-        while(m.find()){
+        while (m.find()) {
             roleClaimList.add(m.group());
         }
 
@@ -56,6 +57,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 
-        response.sendRedirect("http://localhost:3000/oauth2/redirect?token="+ access_token +"&refresh="+ refresh_token);
+        String url = UriComponentsBuilder.fromUriString("https://www.washcar.me").path("/oauth2/redirect").queryParam("token", access_token).queryParam("refresh", refresh_token).build().toUriString();
+        // String url = UriComponentsBuilder.fromUriString("http://localhost:3000").path("/oauth2/redirect").queryParam("token", access_token).queryParam("refresh", refresh_token).build().toUriString();
+        response.sendRedirect(url);
     }
 }
