@@ -64,6 +64,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .httpOnly(true)
                 .path("/")
                 .sameSite("None")
+                .domain("washcar.me")
                 .build();
         response.addHeader("Set-Cookie", accessToken.toString());
         // Cookie accessToken = new Cookie("access_token", access_token);
@@ -77,6 +78,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .httpOnly(true)
                 .path("/")
                 .sameSite("None")
+                .domain("washcar.me")
                 .build();
         response.addHeader("Set-Cookie", refreshToken.toString());
         // Cookie refreshToken = new Cookie("refresh_token", refresh_token);
