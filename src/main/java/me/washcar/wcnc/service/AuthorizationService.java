@@ -26,7 +26,6 @@ public class AuthorizationService {
     private final RoleRepo roleRepository;
     private final SignupTokenRepository signupTokenRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final _EmailSenderService emailSenderService;
 
     private boolean isTokenValidate(String email, String token){

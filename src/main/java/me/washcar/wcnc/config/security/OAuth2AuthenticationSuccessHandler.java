@@ -2,6 +2,8 @@ package me.washcar.wcnc.config.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import lombok.RequiredArgsConstructor;
+import me.washcar.wcnc.util.JwtManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -17,8 +19,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
+@RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
+    private final JwtManager jwtManager;
     @Override
     @SuppressWarnings("unchecked")
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -43,19 +46,18 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             roleClaimList.add(m.group());
         }
 
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
         String access_token = JWT.create()
                 .withSubject(email)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 180 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", roleClaimList)
-                .sign(algorithm);
+                .sign(jwtManager.getAlgorithm());
 
         String refresh_token = JWT.create()
                 .withSubject(email)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 360 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
-                .sign(algorithm);
+                .sign(jwtManager.getAlgorithm());
 
         String url = UriComponentsBuilder.fromUriString("https://www.washcar.me").path("/oauth2/redirect").queryParam("token", access_token).queryParam("refresh", refresh_token).build().toUriString();
         // String url = UriComponentsBuilder.fromUriString("http://localhost:3000").path("/oauth2/redirect").queryParam("token", access_token).queryParam("refresh", refresh_token).build().toUriString();

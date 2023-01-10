@@ -2,13 +2,11 @@ package me.washcar.wcnc.controller;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import me.washcar.wcnc.dto.Authorization;
 import me.washcar.wcnc.dto._StatusCodeDto;
 import me.washcar.wcnc.entity.Role;
 import me.washcar.wcnc.entity.User;
@@ -18,6 +16,7 @@ import me.washcar.wcnc.form.SignupCheckNumberForm;
 import me.washcar.wcnc.form.SignupForm;
 import me.washcar.wcnc.service.AuthorizationService;
 import me.washcar.wcnc.service._UserService;
+import me.washcar.wcnc.util.JwtManager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,7 +45,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class AuthorizationController {
     private final AuthorizationService authorizationService;
     private final _UserService userService;
-
+    private final JwtManager jwtManager;
     @GetMapping("/super/users")
     public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
@@ -84,14 +83,9 @@ public class AuthorizationController {
             }
         }
 
-        // String authorizationHeader = request.getHeader(AUTHORIZATION);
-        // if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
         if (refresh_token != null) {
             try {
-                // String refresh_token = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-
-                JWTVerifier verifier = JWT.require(algorithm).build();
+                JWTVerifier verifier = JWT.require(jwtManager.getAlgorithm()).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
 
                 String email = decodedJWT.getSubject();
@@ -101,7 +95,7 @@ public class AuthorizationController {
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
-                        .sign(algorithm);
+                        .sign(jwtManager.getAlgorithm());
 
                 Cookie accessToken = new Cookie("access_token", access_token);
                 accessToken.setSecure(true);
@@ -124,7 +118,6 @@ public class AuthorizationController {
                 // refresh_token 검증 실패
                 response.setHeader("error", exception.getMessage());
                 response.setStatus(FORBIDDEN.value());
-                // response.sendError(FORBIDDEN.value());
 
                 Map<String, String> error = new HashMap<>();
                 error.put("error_message", exception.getMessage());
@@ -135,7 +128,6 @@ public class AuthorizationController {
                 // access_token 생성 실패
                 response.setHeader("error", exception.getMessage());
                 response.setStatus(INTERNAL_SERVER_ERROR.value());
-                // response.sendError(FORBIDDEN.value());
 
                 Map<String, String> error = new HashMap<>();
                 error.put("error_message", exception.getMessage());

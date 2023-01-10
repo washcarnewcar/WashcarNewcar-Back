@@ -1,8 +1,8 @@
 package me.washcar.wcnc.filter;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import lombok.extern.slf4j.Slf4j;
+import me.washcar.wcnc.util.JwtManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,9 +23,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
+    private final JwtManager jwtManager;
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, JwtManager jwtManager) {
         this.authenticationManager = authenticationManager;
+        this.jwtManager = jwtManager;
     }
 
     @Override
@@ -45,19 +47,18 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         User user = (User)authentication.getPrincipal();
         List<String> roleClaimList = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 180 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", roleClaimList)
-                .sign(algorithm);
+                .sign(jwtManager.getAlgorithm());
 
         String refresh_token = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 360 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
-                .sign(algorithm);
+                .sign(jwtManager.getAlgorithm());
 
         Cookie accessToken = new Cookie("access_token", access_token);
         accessToken.setSecure(true);

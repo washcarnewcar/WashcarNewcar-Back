@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.filter.CustomAuthenticationFilter;
 import me.washcar.wcnc.filter.CustomAuthorizationFilter;
 import me.washcar.wcnc.service.OAuth.CustomOAuth2UserService;
+import me.washcar.wcnc.util.JwtManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final AuthenticationEntryPointImpl authenticationEntryPoint;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtManager jwtManager;
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
@@ -30,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(
-                authenticationManagerBean());
+                authenticationManagerBean(), jwtManager);
 
         http.cors().and().csrf().disable();
         http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
@@ -48,7 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().anyRequest().permitAll();
 
         http.addFilter(customAuthenticationFilter);
-        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomAuthorizationFilter(jwtManager), UsernamePasswordAuthenticationFilter.class);
     }
     @Bean
     @Override
