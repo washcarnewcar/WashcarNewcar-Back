@@ -39,14 +39,14 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
-#  mail:
-#    host: smtp.gmail.com
-#    port: 587
-#    username: noreply.washcar@gmail.com
-#    password:
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: noreply.washcar@gmail.com
+    password: ${GOOGLE_SMTP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

@@ -27,6 +27,8 @@ public class AuthorizationService {
     private final SignupTokenRepository signupTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private final _EmailSenderService emailSenderService;
+
     private boolean isTokenValidate(String email, String token){
         SignupToken signupToken = signupTokenRepository.findByEmail(email).orElse(new SignupToken());
 
@@ -55,7 +57,7 @@ public class AuthorizationService {
         signupToken.setEmail(email);
         signupToken.setToken(token);
 
-        //TODO - sendEmail
+        emailSenderService.sendEmail(email, "[세차새차] 회원가입 인증번호 전달", token);
 
         signupTokenRepository.save(signupToken);
 
