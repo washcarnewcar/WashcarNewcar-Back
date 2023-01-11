@@ -1,7 +1,9 @@
 package me.washcar.wcnc.filter;
 
 import com.auth0.jwt.JWT;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.washcar.wcnc.config.security.CookieManager;
 import me.washcar.wcnc.util.JwtManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,7 +14,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,14 +22,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
+@RequiredArgsConstructor
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtManager jwtManager;
-
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, JwtManager jwtManager) {
-        this.authenticationManager = authenticationManager;
-        this.jwtManager = jwtManager;
-    }
+    private final CookieManager cookieManager;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -44,7 +42,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
-        User user = (User)authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
         List<String> roleClaimList = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 
         String access_token = JWT.create()
@@ -60,21 +58,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withIssuer(request.getRequestURL().toString())
                 .sign(jwtManager.getAlgorithm());
 
-        Cookie accessToken = new Cookie("access_token", access_token);
-        accessToken.setSecure(true);
-        accessToken.setHttpOnly(true);
-        accessToken.setPath("/");
-        accessToken.setDomain("washcar.me");
-        accessToken.setMaxAge(60 * 60 * 24 * 90);
-        response.addCookie(accessToken);
-
-        Cookie refreshToken = new Cookie("refresh_token", refresh_token);
-        refreshToken.setSecure(true);
-        refreshToken.setHttpOnly(true);
-        refreshToken.setPath("/");
-        refreshToken.setDomain("washcar.me");
-        accessToken.setMaxAge(60 * 60 * 24 * 90);
-        response.addCookie(refreshToken);
+        response.addCookie(cookieManager.makeAccessTokenCookie(access_token));
+        response.addCookie(cookieManager.makeRefreshTokenCookie(refresh_token));
     }
 
 }

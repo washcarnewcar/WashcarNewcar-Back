@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import me.washcar.wcnc.config.security.CookieManager;
 import me.washcar.wcnc.dto._StatusCodeDto;
 import me.washcar.wcnc.entity.Role;
 import me.washcar.wcnc.entity.User;
@@ -46,6 +47,8 @@ public class AuthorizationController {
     private final AuthorizationService authorizationService;
     private final _UserService userService;
     private final JwtManager jwtManager;
+    private final CookieManager cookieManager;
+
     @GetMapping("/super/users")
     public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
@@ -75,7 +78,7 @@ public class AuthorizationController {
         // 쿠키 가져옴
         String refresh_token = null;
         Cookie[] cookies = request.getCookies();
-        if (cookies != null){
+        if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("refresh_token")) {
                     refresh_token = cookie.getValue();
@@ -97,21 +100,8 @@ public class AuthorizationController {
                         .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(jwtManager.getAlgorithm());
 
-                Cookie accessToken = new Cookie("access_token", access_token);
-                accessToken.setSecure(true);
-                accessToken.setHttpOnly(true);
-                accessToken.setPath("/");
-                accessToken.setDomain("washcar.me");
-                accessToken.setMaxAge(60 * 60 * 24 * 90);
-                response.addCookie(accessToken);
-
-                Cookie refreshToken = new Cookie("refresh_token", refresh_token);
-                refreshToken.setSecure(true);
-                refreshToken.setHttpOnly(true);
-                refreshToken.setPath("/");
-                refreshToken.setDomain("washcar.me");
-                accessToken.setMaxAge(60 * 60 * 24 * 90);
-                response.addCookie(refreshToken);
+                response.addCookie(cookieManager.makeAccessTokenCookie(access_token));
+                response.addCookie(cookieManager.makeRefreshTokenCookie(refresh_token));
 
             } catch (JWTVerificationException exception) {
                 // TODO: 추후에 커스텀 예외로 전환
@@ -140,25 +130,18 @@ public class AuthorizationController {
     }
 
     @GetMapping("/logout")
-    public void logout(HttpServletResponse response){
-        Cookie accessToken = new Cookie("access_token", null);
-        accessToken.setMaxAge(0);
-        accessToken.setPath("/");
-        response.addCookie(accessToken);
-
-        Cookie refreshToken = new Cookie("refresh_token", null);
-        refreshToken.setMaxAge(0);
-        refreshToken.setPath("/");
-        response.addCookie(refreshToken);
+    public void logout(HttpServletResponse response) {
+        response.addCookie(cookieManager.deleteAccessTokenCookie());
+        response.addCookie(cookieManager.deleteRefreshTokenCookie());
     }
 
     @PostMapping("/signup/check/email")
-    public _StatusCodeDto signupCheckEmail(@Valid @RequestBody SignupCheckEmailForm form){
+    public _StatusCodeDto signupCheckEmail(@Valid @RequestBody SignupCheckEmailForm form) {
         return authorizationService.signupCheckEmail(form.getEmail());
     }
 
     @PostMapping("/signup/check/number")
-    public _StatusCodeDto signupCheckNumber(@Valid @RequestBody SignupCheckNumberForm form){
+    public _StatusCodeDto signupCheckNumber(@Valid @RequestBody SignupCheckNumberForm form) {
         return authorizationService.signupCheckNumber(form.getEmail(), form.getNumber());
     }
 

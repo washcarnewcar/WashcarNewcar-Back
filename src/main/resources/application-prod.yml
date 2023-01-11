@@ -1,0 +1,5 @@
+cookie:
+  domain: washcar.me
+
+cors:
+  origin: https://www.washcar.me

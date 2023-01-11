@@ -2,10 +2,10 @@ package me.washcar.wcnc.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.washcar.wcnc.util.JwtManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,11 +29,9 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
+@RequiredArgsConstructor
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
     private final JwtManager jwtManager;
-    public CustomAuthorizationFilter(JwtManager jwtManager) {
-        this.jwtManager = jwtManager;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -52,11 +50,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 }
             }
 
-            // String authorizationHeader = request.getHeader(AUTHORIZATION);
-            // if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             if (token != null) {
                 try {
-                    // String token = authorizationHeader.substring("Bearer ".length());
                     JWTVerifier verifier = JWT.require(jwtManager.getAlgorithm()).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
 
