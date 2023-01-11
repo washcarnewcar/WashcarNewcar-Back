@@ -2,7 +2,6 @@ package me.washcar.wcnc.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
-import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import me.washcar.wcnc.entity.Reservation;
@@ -32,19 +31,19 @@ public class ReservationDto {
 
   //TODO 가능한날짜리스트-Dto
   @Getter
-  public static class menuAvailableDateDto {
+  public static class AvailableDateDto {
 
     private Object available_date;
   }
 
   //TODO 날짜별예약가능한시간리스트-Dto
   @Getter
-  public static class menuAvailableTimeDto {
+  public static class AvailableTimeDto {
 
     private Object available_time;
   }
 
-  //TODO 세차예약요청-Dto
+  // 세차예약요청-Dto
   @Getter
   @Builder
   public static class ReservationResultDto {

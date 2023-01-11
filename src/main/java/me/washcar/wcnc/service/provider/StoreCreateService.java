@@ -124,7 +124,7 @@ public class StoreCreateService {
     storeLocationRepository.save(storeLocation);
 
     store.setStore(form, storeLocation);
-    storeRepository.save(store);
+    //storeRepository.save(store); store 는 save 가 필요없다 ! JPA 가 처리해준다. 문제 시 주석 해제
 
     List<StoreImage> storeImages = storeImageRepository.findByStore_Id(store.getId())
         .orElseThrow(() -> new CustomException(STORE_IMAGE_NOT_FOUND));

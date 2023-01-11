@@ -2,7 +2,8 @@ package me.washcar.wcnc.controller;
 
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.washcar.wcnc.dto.ReservationDto;
+import me.washcar.wcnc.dto.ReservationDto.AvailableDateDto;
+import me.washcar.wcnc.dto.ReservationDto.AvailableTimeDto;
 import me.washcar.wcnc.dto.ReservationDto.MenuInfoDto;
 import me.washcar.wcnc.dto.ReservationDto.ReservationRequestDto;
 import me.washcar.wcnc.dto.ReservationDto.ReservationResultDto;
@@ -27,14 +28,14 @@ public class ReservationController {
   }
 
   @GetMapping("/store/{slug}/menu/{menuNumber}/available")
-  public ReservationDto.menuAvailableDateDto menuAvailable(@PathVariable String slug,
+  public AvailableDateDto getAvailableDays(@PathVariable String slug,
       @PathVariable String menuNumber) {
-    return reservationService.menuAvailableDate(slug, menuNumber);
+    return reservationService.getAvailableDays(slug, menuNumber);
   }
 
   @GetMapping("/store/{slug}/menu/{menuNumber}/available/{date}")
-  public ReservationDto.menuAvailableTimeDto menuAvailableTime(@PathVariable String slug,
+  public AvailableTimeDto getAvailableTimes(@PathVariable String slug,
       @PathVariable String menuNumber, @PathVariable String date) {
-    return reservationService.menuAvailableTime(slug, menuNumber, date);
+    return reservationService.getAvailableTimes(slug, menuNumber, date);
   }
 }

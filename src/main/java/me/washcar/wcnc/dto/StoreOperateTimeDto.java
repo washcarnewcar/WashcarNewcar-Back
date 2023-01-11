@@ -1,5 +1,6 @@
 package me.washcar.wcnc.dto;
 
+import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -64,8 +65,8 @@ public class StoreOperateTimeDto {
   public static class OperateTimeDto {
 
     @Nullable
-    private String start;
+    private LocalTime start;
     @Nullable
-    private String end;
+    private LocalTime end;
   }
 }

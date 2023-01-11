@@ -1,6 +1,7 @@
 package me.washcar.wcnc.entity;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,33 +25,33 @@ public class StoreOperateTime {
   @GeneratedValue
   private Long id;
 
-  private String sundayStartTime;
+  private LocalTime sundayStartTime;
 
-  private String sundayEndTime;
+  private LocalTime sundayEndTime;
 
-  private String mondayStartTime;
+  private LocalTime mondayStartTime;
 
-  private String mondayEndTime;
+  private LocalTime mondayEndTime;
 
-  private String tuesdayStartTime;
+  private LocalTime tuesdayStartTime;
 
-  private String tuesdayEndTime;
+  private LocalTime tuesdayEndTime;
 
-  private String wednesdayStartTime;
+  private LocalTime wednesdayStartTime;
 
-  private String wednesdayEndTime;
+  private LocalTime wednesdayEndTime;
 
-  private String thursdayStartTime;
+  private LocalTime thursdayStartTime;
 
-  private String thursdayEndTime;
+  private LocalTime thursdayEndTime;
 
-  private String fridayStartTime;
+  private LocalTime fridayStartTime;
 
-  private String fridayEndTime;
+  private LocalTime fridayEndTime;
 
-  private String saturdayStartTime;
+  private LocalTime saturdayStartTime;
 
-  private String saturdayEndTime;
+  private LocalTime saturdayEndTime;
 
   @OneToOne
   private Store store;

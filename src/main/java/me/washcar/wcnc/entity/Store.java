@@ -95,4 +95,9 @@ public class Store {
   public void addReservation(Reservation reservation) {
     this.reservations.add(reservation);
   }
+
+  public void setOperateTime(StoreOperateTime storeOperateTime) {
+    this.storeOperateTime = storeOperateTime;
+    storeOperateTime.setStore(this);
+  }
 }

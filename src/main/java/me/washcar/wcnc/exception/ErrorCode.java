@@ -15,6 +15,8 @@ public enum ErrorCode {
   MODEL_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 모델을 찾을 수 없습니다."),
   STORE_OPERATION_TIME_NOT_FOUND(HttpStatus.NOT_FOUND, "매장의 운영시간을 찾을 수 없습니다."),
 
+  RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 예약을 찾을 수 없습니다."),
+
   SIGNUP_LOGIC_ERROR(HttpStatus.NOT_IMPLEMENTED, "회원가입 로직 에러");
 
   private final HttpStatus httpStatus;

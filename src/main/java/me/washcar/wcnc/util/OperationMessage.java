@@ -1,5 +1,5 @@
 package me.washcar.wcnc.util;
 
-public enum Operation {
+public enum OperationMessage {
   OPERATION, NOT_OPERATION
 }

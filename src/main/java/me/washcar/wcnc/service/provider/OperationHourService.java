@@ -2,6 +2,7 @@ package me.washcar.wcnc.service.provider;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import me.washcar.wcnc.dto.StoreOperateTimeDto.OperateTimeDto;
 import me.washcar.wcnc.dto.StoreOperateTimeDto.StoreOperateTimeResponseDto;
@@ -33,8 +34,7 @@ public class OperationHourService {
     try {
       checkOperateTimeValidate(requestDto);
       storeOperateDateTime(storeOperateTime, requestDto);
-      storeOperateTime.setStore(store);
-      store.setStoreOperateTime(storeOperateTime);
+      store.setOperateTime(storeOperateTime);
       storeOperateTimeRepository.save(storeOperateTime);
     } catch (DateTimeException dateTimeException) {
       return SetOperationHourMessageDto.from(2001, dateTimeException.getMessage());
@@ -81,6 +81,8 @@ public class OperationHourService {
   }
 
   private void checkTimeValidate(OperateTimeDto day) throws DateTimeException {
+    LocalTime start = day.getStart();
+    LocalTime end = day.getEnd();
     if (day.getStart() == null && day.getEnd() == null) {
       return;
     }
@@ -88,15 +90,10 @@ public class OperationHourService {
         && day.getEnd() == null)) {
       throw new DateTimeException("시작시간과 끝 시간 둘 다 입력하세요.");
     }
-    LocalDateTime start = LocalDateTime.of(2023, 1, 1,
-        Integer.parseInt(day.getStart().substring(0, 2)),
-        Integer.parseInt(day.getStart().substring(3, 5)));
-    LocalDateTime end = LocalDateTime.of(2023, 1, 1,
-        Integer.parseInt(day.getEnd().substring(0, 2)),
-        Integer.parseInt(day.getEnd().substring(3, 5)));
+
     if (start.isAfter(end)) {
       throw new DateTimeException("시작시간이 끝시간보다 뒤에 있음");
-    } else if (start.isEqual(end)) {
+    } else if (start.equals(end)) {
       throw new DateTimeException("시작시간과 끝시간이 동일함");
     }
   }
@@ -126,7 +123,7 @@ public class OperationHourService {
     );
   }
 
-  private OperateTimeDto generateOperateTimeDto(String startTime, String endTime) {
+  private OperateTimeDto generateOperateTimeDto(LocalTime startTime, LocalTime endTime) {
     return OperateTimeDto.builder()
         .start(startTime)
         .end(endTime)
