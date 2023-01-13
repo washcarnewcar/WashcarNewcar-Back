@@ -2,11 +2,11 @@ package me.washcar.wcnc.dto.provider;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.ZonedDateTime;
 import lombok.Setter;
 import me.washcar.wcnc.entity.Reservation;
 
@@ -84,9 +84,23 @@ public class ReservationCheck {
   //TODO 예약요청확인-Dto
   //TODO 예약요청거부-Dto
   @Getter
-  public static class responseDto {
+  @Builder
+  public static class ApproveResponseDto {
 
     private int status;
     private String message;
+
+    public static ApproveResponseDto from(int status, String message) {
+      return ApproveResponseDto.builder()
+          .status(status)
+          .message(message)
+          .build();
+    }
+  }
+
+  @Getter
+  public static class ApproveRequestDto {
+
+    private LocalTime expected_wash_time;
   }
 }

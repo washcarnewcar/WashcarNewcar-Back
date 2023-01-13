@@ -1,5 +1,6 @@
 package me.washcar.wcnc.service.provider;
 
+import static java.util.stream.Collectors.toList;
 import static me.washcar.wcnc.entity.ReservationStatus.Reservation_Status.RESERVATION;
 import static me.washcar.wcnc.exception.ErrorCode.STORE_NOT_FOUND;
 
@@ -32,7 +33,7 @@ public class ScheduleService {
     List<Reservation> reservations = reservationRepository
         .findAllByStore_IdAndReservationStatus_Id(store.getId(), RESERVATION.getId())
         .orElse(new ArrayList<>());
-    return reservations.stream().map(RequestReservationDto::from).collect(Collectors.toList());
+    return reservations.stream().map(RequestReservationDto::from).collect(toList());
   }
 
   //TODO 세차스케줄상세-서비스

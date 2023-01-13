@@ -1,6 +1,7 @@
 package me.washcar.wcnc.entity;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -13,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -34,6 +36,8 @@ public class Reservation {
   private String carNumber;
 
   private LocalDateTime endDate;
+  @Setter
+  private LocalTime expectedWashTime;
 
   @OneToOne
   private Model model;
@@ -49,6 +53,7 @@ public class Reservation {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "status_id")
+  @Setter
   private ReservationStatus reservationStatus;
 
 //    @ManyToOne

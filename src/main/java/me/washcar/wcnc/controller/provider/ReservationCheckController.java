@@ -1,7 +1,8 @@
 package me.washcar.wcnc.controller.provider;
 
 import lombok.RequiredArgsConstructor;
-import me.washcar.wcnc.dto.provider.ReservationCheck;
+import me.washcar.wcnc.dto.provider.ReservationCheck.ApproveRequestDto;
+import me.washcar.wcnc.dto.provider.ReservationCheck.ApproveResponseDto;
 import me.washcar.wcnc.dto.provider.ReservationCheck.RequestReservationDto;
 import me.washcar.wcnc.dto.provider.ReservationCheck.ReservationDetailDto;
 import me.washcar.wcnc.dto.provider.ReservationCheck.ReservationListResult;
@@ -26,12 +27,12 @@ public class ReservationCheckController {
     return reservationCheckService.getReservationDetail(slug, reservationId);
   }
 
-  @RequestMapping(value = "/provider/{slug}/request/{reservationNumber}", method = RequestMethod.POST)
-  public ReservationCheck.responseDto response(
+  @PostMapping(value = "/provider/{slug}/reservation/{reservationId}/request")
+  public ApproveResponseDto approveRequest(
       @PathVariable String slug,
-      @PathVariable long reservationNumber,
-      @RequestBody String body
+      @PathVariable String reservationId,
+      @RequestBody ApproveRequestDto requestDto
   ) {
-    return reservationCheckService.response(slug, reservationNumber, body);
+    return reservationCheckService.approveRequest(slug, reservationId, requestDto);
   }
 }
